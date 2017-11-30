@@ -1,5 +1,6 @@
 package com.deservel.website;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
@@ -9,6 +10,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  *
  * @author deservel
  */
+@MapperScan(basePackages = "com.deservel.website.dao")
 @SpringBootApplication
 public class CoreApplication extends SpringBootServletInitializer{
 
