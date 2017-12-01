@@ -15,7 +15,7 @@
  */
 package com.deservel.website.controller.admin;
 
-import com.deservel.website.controller.BaseController;
+import com.deservel.website.controller.AbstractBaseController;
 import com.deservel.website.model.dto.Statistics;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Contents;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-public class IndexController extends BaseController{
+public class IndexController extends AbstractBaseController {
 
     @Autowired
     SiteService siteService;

@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.deservel.website.controller;
+package com.deservel.website.service;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.deservel.website.common.bean.RestResponse;
 
 /**
+ *  用户认证服务
+ *
  * @author DeserveL
- * @date 2017/11/29 0029 下午 23:32
+ * @date 2017/12/1 16:00
  * @since 1.0.0
  */
-@RestController
-@RequestMapping("")
-public class DemoController {
-
-    @RequestMapping("demo")
-    public String demo(){
-        return "成功";
-    }
+public interface AuthService {
+    /**
+     * 登录操作
+     *
+     * @param username
+     * @param password
+     * @param remoteIp
+     * @return
+     */
+    RestResponse doLogin(String username, String password, String remoteIp);
 }

@@ -13,12 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.deservel.website.controller;
+package com.deservel.website.config;
 
 /**
+ * 网站配置表
+ *
  * @author DeserveL
- * @date 2017/11/30 16:38
+ * @date 2017/12/1 13:55
  * @since 1.0.0
  */
-public class BaseController {
+public class WebSiteConst {
+    /**
+     * 用户session key
+     */
+    public static String LOGIN_SESSION_KEY = "login_user";
+
+    /**
+     *用户uid cookie key
+     */
+    public static final String USER_IN_COOKIE = "S_L_ID";
+
+    /**
+     * aes加密加盐
+     */
+    public static final String AES_SALT = "012345abcdef6789";
+
+    /**
+     * 后台请求路径
+     */
+    public static final String ADMIN_REQUEST = "/admin";
+
+    /**
+     * 后台登录请求路径
+     */
+    public static final String ADMIN_REQUEST_LONGIN = "/admin/login";
 }
