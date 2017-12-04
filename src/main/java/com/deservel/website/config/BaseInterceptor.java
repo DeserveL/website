@@ -43,6 +43,8 @@ public class BaseInterceptor implements HandlerInterceptor{
 
     @Autowired
     UserService userService;
+    @Autowired
+    ThymeleafCommons thymeleafCommons;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -76,7 +78,8 @@ public class BaseInterceptor implements HandlerInterceptor{
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-
+        //一些工具类和公共方法
+        request.setAttribute("commons",thymeleafCommons);
     }
 
     @Override

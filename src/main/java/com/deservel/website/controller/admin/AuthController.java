@@ -15,7 +15,9 @@
  */
 package com.deservel.website.controller.admin;
 
+import com.deservel.website.common.bean.ExceptionType;
 import com.deservel.website.common.bean.RestResponse;
+import com.deservel.website.common.exception.TipPageException;
 import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.controller.AbstractBaseController;
 import com.deservel.website.model.po.Users;
@@ -48,6 +50,7 @@ public class AuthController extends AbstractBaseController {
      */
     @GetMapping("/login")
     public String login() {
+        //throw new TipPageException(ExceptionType.AUTHORIZATION_ERROR);
         return "admin/login";
     }
 
