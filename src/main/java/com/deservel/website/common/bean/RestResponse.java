@@ -4,8 +4,10 @@ import lombok.Data;
 
 /**
  * rest返回对象
- *^
- * @param <T>
+ *
+ * @author 1
+ * @date 2017/12/5 15:13
+ * @since 1.0.0
  */
 @Data
 public class RestResponse<T> {

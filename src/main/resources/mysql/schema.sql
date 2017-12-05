@@ -168,6 +168,6 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 INSERT INTO `users` (`uid`, `username`, `password`, `email`, `home_url`, `screen_name`, `created`, `activated`, `logged`, `group_name`)
 VALUES
-	(1, 'admin', 'a66abb5684c45962d887564f08346e8d', '1034683568@qq.com', NULL, 'admin', 1490756162, 0, 0, 'visitor');
+	(1, 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', '714395012@qq.com', NULL, 'admin', 1490756162, 0, 0, 'visitor');
 UNLOCK TABLES;
 -- 用户表初始数据结束

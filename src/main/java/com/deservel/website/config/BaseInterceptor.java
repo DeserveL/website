@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * 自定义拦截器
  *
  * @author DeserveL
@@ -37,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 1.0.0
  */
 @Component
-public class BaseInterceptor implements HandlerInterceptor{
+public class BaseInterceptor implements HandlerInterceptor {
     private static final Logger LOGGE = LoggerFactory.getLogger(BaseInterceptor.class);
     private static final String USER_AGENT = "user-agent";
 
@@ -50,16 +49,16 @@ public class BaseInterceptor implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String uri = request.getRequestURI();
         //打印访问日志
-        if(LOGGE.isInfoEnabled()){
+        if (LOGGE.isInfoEnabled()) {
             LOGGE.info("UserAgent: {}", request.getHeader(USER_AGENT));
             LOGGE.info("用户访问地址: {}, 来路地址: {}", uri, IpUtils.getIpAddrByRequest(request));
         }
 
         //在session cookie信息中查找用户信息（cookie可以伪造，有问题）
         Users loginUser = WebSiteTools.getLoginUser(request);
-        if(null == loginUser){
+        if (null == loginUser) {
             Integer uid = WebSiteTools.getCookieUid(request);
-            if(null != uid){
+            if (null != uid) {
                 loginUser = userService.queryUserById(uid);
                 WebSiteTools.setLoginUser(request, loginUser);
             }
@@ -79,7 +78,7 @@ public class BaseInterceptor implements HandlerInterceptor{
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
         //一些工具类和公共方法
-        request.setAttribute("commons",thymeleafCommons);
+        request.setAttribute("commons", thymeleafCommons);
     }
 
     @Override

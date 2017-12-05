@@ -15,9 +15,8 @@
  */
 package com.deservel.website.controller.admin;
 
-import com.deservel.website.common.bean.ExceptionType;
 import com.deservel.website.common.bean.RestResponse;
-import com.deservel.website.common.exception.TipPageException;
+import com.deservel.website.config.WebSiteConst;
 import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.controller.AbstractBaseController;
 import com.deservel.website.model.po.Users;
@@ -50,7 +49,6 @@ public class AuthController extends AbstractBaseController {
      */
     @GetMapping("/login")
     public String login() {
-        //throw new TipPageException(ExceptionType.AUTHORIZATION_ERROR);
         return "admin/login";
     }
 
@@ -67,15 +65,18 @@ public class AuthController extends AbstractBaseController {
     public RestResponse doLogin(@RequestParam String username,
                                 @RequestParam String password,
                                 @RequestParam(required = false) String remeber_me) {
-        RestResponse restResponse = authService.doLogin(username, password, getRemoteIp());
-        if (StringUtils.isBlank(remeber_me) && restResponse.isSuccess()) {
+        Users user = authService.doLogin(username, password, getRemoteIp());
+        //存入session
+        getSession().setAttribute(WebSiteConst.LOGIN_SESSION_KEY, user);
+        //是否存入cookie
+        if (StringUtils.isBlank(remeber_me) && user != null) {
             try {
-                WebSiteTools.setCookieUid(getResponse(), ((Users) restResponse.getPayload()).getUid());
+                WebSiteTools.setCookieUid(getResponse(), user.getUid());
             } catch (Exception e) {
                 logger.error("记住用户失败",e);
             }
         }
-        return null;
+        return RestResponse.ok(user);
     }
 
     @RequestMapping("/logout")

@@ -16,6 +16,7 @@
 package com.deservel.website.utils;
 
 import com.deservel.website.common.utils.AesUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
 /**
@@ -29,4 +30,11 @@ public class UtilsTest {
         String lcc = AesUtils.deAes("SVHUCWHU9FT9MVbjPyhd4A==", "012345abcdef6789");
         System.out.println(lcc);
     }
+
+    @Test
+    public void md5(){
+        String s = DigestUtils.md5Hex("admin" + "admin");
+        System.out.println(s);
+    }
 }
+

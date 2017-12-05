@@ -47,4 +47,16 @@ public class WebSiteConst {
      * 后台登录请求路径
      */
     public static final String ADMIN_REQUEST_LONGIN = "/admin/login";
+
+
+    /**
+     * 密码允许错误次数
+     */
+    public static final int PASSWORD_ERROR_COUNT = 3;
+
+
+    /**
+     * 密码错误时间（s）
+     */
+    public static final int PASSWORD_ERROR_TIME = 10*60;
 }

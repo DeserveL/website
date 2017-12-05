@@ -20,9 +20,9 @@
 
 <div class="wrapper-page">
     <div class="ex-page-content text-center">
-        <h1>code:<span class="counter" th:text="${code}"></span></h1>
-        <h1>message:<span class="counter" th:text="${message}"></span></h1>
         <h2 class="font-light">服务器出了点差错.</h2><br/>
+        <h3><span class="counter" th:text="'code:'+${code}"></span></h3>
+        <h3><span class="counter" th:text="'message:'+${message}"></span></h3>
         <p>可以尝试向社区发出求助 <a href="https://github.com/deservel/website/issues/new" target="_blank">New Issues</a></p>
         <a class="btn btn-purple waves-effect waves-light" href="/"><i class="fa fa-angle-left"></i> 返回首页</a>
     </div>

@@ -15,6 +15,8 @@
  */
 package com.deservel.website.common.bean;
 
+import com.deservel.website.config.WebSiteConst;
+
 /**
  * 异常类型
  *
@@ -25,10 +27,12 @@ package com.deservel.website.common.bean;
 public enum ExceptionType {
 
     AUTHORIZATION_ERROR(401, "请先登录"),
+    USERNAME_PASSWORD_BLANK(601, "用户名和密码不能为空"),
+    USERNAME_PASSWORD_ERROR_COUNT(602, "您输入密码已经错误超过" + WebSiteConst.PASSWORD_ERROR_COUNT + "次，请" + WebSiteConst.PASSWORD_ERROR_TIME + "秒后尝试"),
+    USER_NOT_FOUND(603, "用户不存在"),
+    USERNAME_PASSWORD_ERROR(604, "用户名或密码错误"),
     DATA_NOT_FOUND(404, "数据未找到"),
     PARAMETER_ILLEGAL(403, "参数无效"),
-    USER_NOT_FOUND(602, "用户不存在"),
-    USERNAME_PASSWORD_ERROR(601, "用户名或密码错误"),
     ARTICLE_THUMBUP_ERROR(603, "已经点过赞");
 
     private int code;

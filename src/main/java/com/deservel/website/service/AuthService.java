@@ -16,6 +16,7 @@
 package com.deservel.website.service;
 
 import com.deservel.website.common.bean.RestResponse;
+import com.deservel.website.model.po.Users;
 
 /**
  *  用户认证服务
@@ -33,5 +34,5 @@ public interface AuthService {
      * @param remoteIp
      * @return
      */
-    RestResponse doLogin(String username, String password, String remoteIp);
+    Users doLogin(String username, String password, String remoteIp);
 }

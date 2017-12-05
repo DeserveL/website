@@ -15,9 +15,10 @@
  */
 package com.deservel.website.config;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.Random;
 
 /**
  * 主题公共函数
@@ -37,6 +38,21 @@ public class ThymeleafCommons {
      * @return
      */
     public static String random(int max, String str) {
-        return new Random().nextInt(max-1+1)+ 1 + str;
+        return RandomUtils.nextInt(1, max) + str;
+    }
+
+    /**
+     * 返回github头像地址
+     *
+     * @param email
+     * @return
+     */
+    public static String gravatar(String email) {
+        String avatarUrl = "https://github.com/identicons/";
+        if (StringUtils.isBlank(email)) {
+            email = "user@hanshuai.xin";
+        }
+        String hash = DigestUtils.md5Hex(email.trim().toLowerCase());
+        return avatarUrl + hash + ".png";
     }
 }

@@ -17,10 +17,20 @@ package com.deservel.website.service.impl;
 
 import com.deservel.website.common.bean.ExceptionType;
 import com.deservel.website.common.cache.MapCache;
-import com.deservel.website.common.bean.RestResponse;
 import com.deservel.website.common.exception.TipRestException;
+import com.deservel.website.config.WebSiteConst;
+import com.deservel.website.dao.LogsMapper;
+import com.deservel.website.dao.UsersMapper;
+import com.deservel.website.model.dto.LogActions;
+import com.deservel.website.model.po.Logs;
+import com.deservel.website.model.po.Users;
 import com.deservel.website.service.AuthService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author DeserveL
@@ -32,6 +42,11 @@ public class AuthServiceImpl implements AuthService {
 
     protected MapCache cache = MapCache.single();
 
+    @Autowired
+    UsersMapper usersMapper;
+    @Autowired
+    LogsMapper logsMapper;
+
     /**
      * 登录操作
      *
@@ -41,8 +56,33 @@ public class AuthServiceImpl implements AuthService {
      * @return
      */
     @Override
-    public RestResponse doLogin(String username, String password, String remoteIp) {
-        cache.get("login_error_count"+username);
-        throw new TipRestException(ExceptionType.AUTHORIZATION_ERROR);
+    public Users doLogin(String username, String password, String remoteIp) {
+        //非空
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            throw new TipRestException(ExceptionType.USERNAME_PASSWORD_BLANK);
+        }
+        //用户错误次数
+        Integer error_count = cache.get("login_error_count" + username);
+        if (null != error_count && error_count > WebSiteConst.PASSWORD_ERROR_COUNT) {
+            throw new TipRestException(ExceptionType.USERNAME_PASSWORD_ERROR_COUNT);
+        }
+        Users users = new Users();
+        users.setUsername(username);
+        //查询用户
+        int count = usersMapper.selectCount(users);
+        if (count < 1) {
+            throw new TipRestException(ExceptionType.USER_NOT_FOUND);
+        }
+        String pwd = DigestUtils.md5Hex(username + password);
+        users.setPassword(pwd);
+        List<Users> userList = usersMapper.select(users);
+        if (userList.size() != 1) {
+            error_count = null == error_count ? 1 : error_count + 1;
+            cache.set("login_error_count" + username, error_count, WebSiteConst.PASSWORD_ERROR_TIME);
+            throw new TipRestException(ExceptionType.USERNAME_PASSWORD_ERROR);
+        }
+        Logs logs = LogActions.LOGIN.logInstance(null, userList.get(0).getUid(), remoteIp);
+        logsMapper.insert(logs);
+        return userList.get(0);
     }
 }
