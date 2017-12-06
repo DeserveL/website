@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
             cache.set("login_error_count" + username, error_count, WebSiteConst.PASSWORD_ERROR_TIME);
             throw new TipRestException(ExceptionType.USERNAME_PASSWORD_ERROR);
         }
-        Logs logs = LogActions.LOGIN.logInstance(null, userList.get(0).getUid(), remoteIp);
+        Logs logs = LogActions.logInstance(LogActions.LOGIN, null, userList.get(0).getUid(), remoteIp);
         logsMapper.insert(logs);
         return userList.get(0);
     }

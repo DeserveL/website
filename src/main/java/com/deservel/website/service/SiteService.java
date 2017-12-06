@@ -31,18 +31,18 @@ public interface SiteService {
     /**
      * 最新收到的评论
      *
-     * @param i
+     * @param limit
      * @return
      */
-    List<Comments> recentComments(Integer i);
+    List<Comments> recentComments(Integer limit);
 
     /**
      * 最新发表的文章
      *
-     * @param i
+     * @param limit
      * @return
      */
-    List<Contents> recentContents(Integer i);
+    List<Contents> recentContents(Integer limit);
 
     /**
      * 获取后台统计数据

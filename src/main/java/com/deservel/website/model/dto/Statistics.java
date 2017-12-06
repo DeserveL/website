@@ -44,4 +44,8 @@ public class Statistics implements Serializable {
      */
     private long attachs;
 
+    /**
+     * 友链数
+     */
+    private long links;
 }

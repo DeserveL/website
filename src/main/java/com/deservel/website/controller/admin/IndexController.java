@@ -53,8 +53,11 @@ public class IndexController extends AbstractBaseController {
      */
     @GetMapping(value = {"","/index"})
     public String index(HttpServletRequest request){
+        //最新的5条评论
         List<Comments> comments = siteService.recentComments(5);
+        //最新的5跳文章
         List<Contents> contents = siteService.recentContents(5);
+        //获取后台统计数据
         Statistics statistics = siteService.getStatistics();
         // 取最新的20条日志
         List<Logs> logs = logService.getLogs(1, 5);

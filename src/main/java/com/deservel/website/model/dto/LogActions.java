@@ -9,29 +9,33 @@ import com.deservel.website.model.po.Logs;
  * @date 2017/12/5 11:40
  * @since 1.0.0
  */
-public enum LogActions {
+public interface LogActions {
 
-    LOGIN("登录后台"), UP_PWD("修改密码"), UP_INFO("修改个人信息"),
-    DEL_ARTICLE("删除文章"), DEL_PAGE("删除页面"), SYS_BACKUP("系统备份"),
-    SYS_SETTING("保存系统设置"), INIT_SITE("初始化站点");
+    String LOGIN = "登录后台";
 
-    private String action;
+    String UP_PWD = "修改密码";
 
-    public String getAction() {
-        return action;
-    }
+    String UP_INFO = "修改个人信息";
 
-    public void setAction(String action) {
-        this.action = action;
-    }
+    String DEL_ATTACH = "删除附件";
 
-    LogActions(String action) {
-        this.action = action;
-    }
+    String DEL_ARTICLE = "删除文章";
 
-    public Logs logInstance(String data, Integer authorId, String ip) {
+    String DEL_PAGE = "删除页面";
+
+    String SYS_BACKUP = "系统备份";
+
+    String SYS_SETTING = "保存系统设置";
+
+    String THEME_SETTING = "主题设置";
+
+    String INIT_SITE = "初始化站点";
+
+    String RELOAD_SYS = "重启系统";
+
+    static Logs logInstance(String action, String data, Integer authorId, String ip) {
         Logs logs = new Logs();
-        logs.setAction(this.action);
+        logs.setAction(action);
         logs.setData(data);
         logs.setAuthorId(authorId);
         logs.setIp(ip);

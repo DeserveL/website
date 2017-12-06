@@ -18,7 +18,11 @@ package com.deservel.website.config;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * 主题公共函数
@@ -54,5 +58,39 @@ public class ThymeleafCommons {
         }
         String hash = DigestUtils.md5Hex(email.trim().toLowerCase());
         return avatarUrl + hash + ".png";
+    }
+
+    /**
+     * 网站链接
+     *
+     * @return
+     */
+    public static String site_url() {
+        return site_url("");
+    }
+
+    /**
+     * 返回网站链接下的全址
+     *
+     * @param sub 后面追加的地址
+     * @return
+     */
+    public static String site_url(String sub) {
+        //TODO 网站全址
+        return sub;
+    }
+
+    /**
+     * 格式化unix时间戳为日期
+     *
+     * @param unixTime
+     * @param patten
+     * @return
+     */
+    public static String fmtdate(Integer unixTime, String patten) {
+        if (null != unixTime && StringUtils.isNotBlank(patten)) {
+            return DateFormatUtils.format(new Date(unixTime * 1000L), patten);
+        }
+        return "";
     }
 }

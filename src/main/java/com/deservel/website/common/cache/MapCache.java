@@ -28,11 +28,11 @@ public class MapCache {
      */
     private Map<String, CacheObject> cachePool;
 
-    public MapCache() {
+    private MapCache() {
         this(DEFAULT_CACHES);
     }
 
-    public MapCache(int cacheCount) {
+    private MapCache(int cacheCount) {
         cachePool = new ConcurrentHashMap<>(cacheCount);
     }
 

@@ -15,9 +15,14 @@
  */
 package com.deservel.website.service.impl;
 
+import com.deservel.website.dao.LogsMapper;
 import com.deservel.website.model.po.Logs;
 import com.deservel.website.service.LogService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.page.PageMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
 
@@ -28,15 +33,23 @@ import java.util.List;
  */
 @Service
 public class LogServiceImpl implements LogService {
+
+    @Autowired
+    LogsMapper logsMapper;
+
     /**
      * 获取日志信息
      *
-     * @param i
-     * @param i1
+     * @param page
+     * @param limit
      * @return
      */
     @Override
-    public List<Logs> getLogs(Integer i, Integer i1) {
-        return null;
+    public List<Logs> getLogs(Integer page, Integer limit) {
+        Condition condition = new Condition(Logs.class);
+        condition.setOrderByClause("id desc");
+        PageHelper.startPage((page - 1) * limit, limit);
+        List<Logs> logs = logsMapper.selectByCondition(condition);
+        return logs;
     }
 }

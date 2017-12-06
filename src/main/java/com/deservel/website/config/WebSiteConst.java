@@ -22,41 +22,44 @@ package com.deservel.website.config;
  * @date 2017/12/1 13:55
  * @since 1.0.0
  */
-public class WebSiteConst {
+public interface WebSiteConst {
     /**
      * 用户session key
      */
-    public static String LOGIN_SESSION_KEY = "login_user";
+    String LOGIN_SESSION_KEY = "login_user";
 
     /**
      *用户uid cookie key
      */
-    public static final String USER_IN_COOKIE = "S_L_ID";
+    String USER_IN_COOKIE = "S_L_ID";
 
     /**
      * aes加密加盐
      */
-    public static final String AES_SALT = "012345abcdef6789";
+    String AES_SALT = "012345abcdef6789";
 
     /**
      * 后台请求路径
      */
-    public static final String ADMIN_REQUEST = "/admin";
+    String ADMIN_REQUEST = "/admin";
 
     /**
      * 后台登录请求路径
      */
-    public static final String ADMIN_REQUEST_LONGIN = "/admin/login";
-
+    String ADMIN_REQUEST_LONGIN = "/admin/login";
 
     /**
      * 密码允许错误次数
      */
-    public static final int PASSWORD_ERROR_COUNT = 3;
-
+    int PASSWORD_ERROR_COUNT = 3;
 
     /**
      * 密码错误时间（s）
      */
-    public static final int PASSWORD_ERROR_TIME = 10*60;
+    int PASSWORD_ERROR_TIME = 10*60;
+
+    /**
+     * 后台统计数据缓存时间
+     */
+    int STATISTICS_TIME = 10*60*60;
 }

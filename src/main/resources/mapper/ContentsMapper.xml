@@ -22,4 +22,8 @@
     <result column="allow_feed" jdbcType="BIT" property="allowFeed" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+
+  <select id="countContentsByTypeAndStatus" resultType="java.lang.Long">
+      select count(*) from contents where type=#{type} and status=#{status}
+  </select>
 </mapper>
