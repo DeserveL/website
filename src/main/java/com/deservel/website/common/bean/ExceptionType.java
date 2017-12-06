@@ -31,6 +31,7 @@ public enum ExceptionType {
     USERNAME_PASSWORD_ERROR_COUNT(602, "您输入密码已经错误超过" + WebSiteConst.PASSWORD_ERROR_COUNT + "次，请" + WebSiteConst.PASSWORD_ERROR_TIME + "秒后尝试"),
     USER_NOT_FOUND(603, "用户不存在"),
     USERNAME_PASSWORD_ERROR(604, "用户名或密码错误"),
+    ID_NOT_ONE(605, "query content by id and return is not one"),
     DATA_NOT_FOUND(404, "数据未找到"),
     PARAMETER_ILLEGAL(403, "参数无效"),
     ARTICLE_THUMBUP_ERROR(603, "已经点过赞");

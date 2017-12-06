@@ -15,6 +15,8 @@
  */
 package com.deservel.website.config;
 
+import com.deservel.website.model.po.Contents;
+import com.deservel.website.model.po.Metas;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -78,6 +80,45 @@ public class ThymeleafCommons {
     public static String site_url(String sub) {
         //TODO 网站全址
         return sub;
+    }
+
+    /**
+     * 返回文章链接地址
+     *
+     * @param contents
+     * @return
+     */
+    public static String permalink(Contents contents) {
+        return permalink(contents.getCid(), contents.getSlug());
+    }
+
+    /**
+     * 返回文章链接地址
+     *
+     * @param cid
+     * @param slug
+     * @return
+     */
+    public static String permalink(Integer cid, String slug) {
+        return site_url("/article/" + (StringUtils.isNotBlank(slug) ? slug : cid.toString()));
+    }
+
+    /**
+     * 判断category和cat的交集
+     *
+     * @param cats
+     * @return
+     */
+    public static boolean exist_cat(Metas category, String cats) {
+        String[] arr = StringUtils.split(cats, ",");
+        if (null != arr && arr.length > 0) {
+            for (String c : arr) {
+                if (c.trim().equals(category.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

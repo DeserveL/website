@@ -15,37 +15,22 @@
  */
 package com.deservel.website.service;
 
-import com.deservel.website.AbstractSpringBootTest;
-import com.deservel.website.dao.LogsMapper;
-import com.deservel.website.dao.MetasMapper;
-import com.deservel.website.model.dto.Types;
-import com.deservel.website.model.po.Logs;
 import com.deservel.website.model.po.Metas;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 /**
  * @author DeserveL
- * @date 2017/11/30 14:38
+ * @date 2017/12/6 0006 下午 20:36
  * @since 1.0.0
  */
-public class DaoTest extends AbstractSpringBootTest{
+public interface MetaService {
 
-    @Autowired
-    LogsMapper logsMapper;
-    @Autowired
-    MetasMapper metasMapper;
-
-    @Test
-    public void logs(){
-        List<Logs> logs = logsMapper.selectAll();
-    }
-
-    @Test
-    public void metas(){
-        List<Metas> metas = metasMapper.selectByType(Types.CATEGORY);
-        System.out.println(metas);
-    }
+    /**
+     * 根据类别获取
+     *
+     * @param type
+     * @return
+     */
+    List<Metas> getMetas(String type);
 }

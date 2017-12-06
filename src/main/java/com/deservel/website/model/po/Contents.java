@@ -51,6 +51,16 @@ public class Contents {
     private String type;
 
     /**
+     * 内容类型，markdown或者html
+     */
+    private String fmtType;
+
+    /**
+     * 文章缩略图
+     */
+    private String thumbImg;
+
+    /**
      * 内容状态
      */
     private String status;

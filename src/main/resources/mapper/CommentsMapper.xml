@@ -16,6 +16,8 @@
     <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="agent" jdbcType="VARCHAR" property="agent" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="fmt_type" jdbcType="VARCHAR" property="fmtType" />
+    <result column="thumb_img" jdbcType="VARCHAR" property="thumbImg" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="parent" jdbcType="INTEGER" property="parent" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />

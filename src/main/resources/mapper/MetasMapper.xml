@@ -13,4 +13,8 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="parent" jdbcType="INTEGER" property="parent" />
   </resultMap>
+  
+  <select id="selectByType" resultMap="BaseResultMap">
+      select * from metas where type = #{type} ORDER BY sort desc, mid desc;
+  </select>
 </mapper>

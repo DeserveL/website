@@ -13,39 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.deservel.website.service;
+package com.deservel.website.service.impl;
 
-import com.deservel.website.AbstractSpringBootTest;
-import com.deservel.website.dao.LogsMapper;
 import com.deservel.website.dao.MetasMapper;
-import com.deservel.website.model.dto.Types;
-import com.deservel.website.model.po.Logs;
 import com.deservel.website.model.po.Metas;
-import org.junit.Test;
+import com.deservel.website.service.MetaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
 /**
  * @author DeserveL
- * @date 2017/11/30 14:38
+ * @date 2017/12/6 0006 下午 20:40
  * @since 1.0.0
  */
-public class DaoTest extends AbstractSpringBootTest{
+@Service
+public class MetaServiceImpl implements MetaService {
 
-    @Autowired
-    LogsMapper logsMapper;
     @Autowired
     MetasMapper metasMapper;
 
-    @Test
-    public void logs(){
-        List<Logs> logs = logsMapper.selectAll();
-    }
-
-    @Test
-    public void metas(){
-        List<Metas> metas = metasMapper.selectByType(Types.CATEGORY);
-        System.out.println(metas);
+    /**
+     * 根据类别获取
+     *
+     * @param type
+     * @return
+     */
+    @Override
+    public List<Metas> getMetas(String type) {
+        List<Metas> metaList = metasMapper.selectByType(type);
+        return metaList;
     }
 }

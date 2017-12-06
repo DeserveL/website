@@ -52,7 +52,7 @@ public class IndexController extends AbstractBaseController {
      * @return
      */
     @GetMapping(value = {"","/index"})
-    public String index(HttpServletRequest request){
+    public String index(){
         //最新的5条评论
         List<Comments> comments = siteService.recentComments(5);
         //最新的5跳文章
@@ -62,10 +62,10 @@ public class IndexController extends AbstractBaseController {
         // 取最新的20条日志
         List<Logs> logs = logService.getLogs(1, 5);
 
-        request.setAttribute("comments", comments);
-        request.setAttribute("articles", contents);
-        request.setAttribute("statistics", statistics);
-        request.setAttribute("logs", logs);
+        setRequestAttribute("comments", comments);
+        setRequestAttribute("articles", contents);
+        setRequestAttribute("statistics", statistics);
+        setRequestAttribute("logs", logs);
         return "admin/index";
     }
 }

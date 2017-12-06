@@ -60,6 +60,8 @@ CREATE TABLE `contents` (
   `content` text COMMENT '内容文字' COMMENT '内容文字',
   `author_id` int(10) unsigned DEFAULT '0' COMMENT '内容所属用户id',
   `type` varchar(16) DEFAULT 'post' COMMENT '内容类别',
+  `fmt_type` varchar(16) DEFAULT 'markdown' COMMENT '内容类型',
+  `thumb_img` varchar(255) DEFAULT NULL COMMENT '缩略图',
   `status` varchar(16) DEFAULT 'publish' COMMENT '内容状态',
   `tags` varchar(200) DEFAULT NULL COMMENT '标签列表',
   `categories` varchar(200) DEFAULT NULL COMMENT '分类列表',
@@ -75,10 +77,10 @@ CREATE TABLE `contents` (
 
 -- 内容表初始数据
 LOCK TABLES `contents` WRITE;
-INSERT INTO `contents` (`cid`, `title`, `slug`, `created`, `modified`, `content`, `author_id`, `type`, `status`, `tags`, `categories`, `hits`, `comments_num`, `allow_comment`, `allow_ping`, `allow_feed`)
+INSERT INTO `contents` (`cid`, `title`, `slug`, `created`, `modified`, `content`, `author_id`, `type`, `fmt_type`, `thumb_img`,`status`, `tags`, `categories`, `hits`, `comments_num`, `allow_comment`, `allow_ping`, `allow_feed`)
 VALUES
-	(1,'about my blog','about',1487853610,1487872488,'### Hello World\r\n\r\nabout me\r\n\r\n### ...\r\n\r\n...',1,'page','publish',NULL,NULL,0,0,1,1,1),
-	(2,'Hello My Blog',NULL,1487861184,1487872798,'## Hello  World.\r\n\r\n> ...\r\n\r\n----------\r\n\r\n\r\n<!--more-->\r\n\r\n```java\r\npublic static void main(String[] args){\r\n    System.out.println(\"Hello 13 Blog.\");\r\n}\r\n```',1,'post','publish','','default',10,0,1,1,1);
+  (1,'about my blog','about',1487853610,1487872488,'### Hello World\r\n\r\nabout me\r\n\r\n### ...\r\n\r\n...',1,'page','markdown',null,'publish',NULL,NULL,0,0,1,1,1),
+  (2,'Hello My Blog',NULL,1487861184,1487872798,'## Hello  World.\r\n\r\n> ...\r\n\r\n----------\r\n\r\n\r\n<!--more-->\r\n\r\n```java\r\npublic static void main(String[] args){\r\n    System.out.println(\"Hello 13 Blog.\");\r\n}\r\n```',1,'post','markdown',null,'publish','','default',10,0,1,1,1);
 UNLOCK TABLES;
 -- 内容表初始数据结束
 
