@@ -37,6 +37,8 @@ import java.util.Date;
 @Component
 public class ThymeleafCommons {
 
+    private static final String[] COLORS = {"default", "primary", "success", "info", "warning", "danger", "inverse", "purple", "pink"};
+
     /**
      * 获取随机数
      *
@@ -148,5 +150,15 @@ public class ThymeleafCommons {
             return HtmlUtils.mdToHtml(value);
         }
         return "";
+    }
+
+    /**
+     * 随机颜色
+     *
+     * @return
+     */
+    public static String rand_color() {
+        int r = RandomUtils.nextInt(0, COLORS.length - 1);
+        return COLORS[r];
     }
 }

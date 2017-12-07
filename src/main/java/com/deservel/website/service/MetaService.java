@@ -15,6 +15,7 @@
  */
 package com.deservel.website.service;
 
+import com.deservel.website.model.dto.MetaDto;
 import com.deservel.website.model.po.Metas;
 
 import java.util.List;
@@ -42,4 +43,13 @@ public interface MetaService {
      * @param type
      */
     void saveMetas(Integer cid, String names, String type);
+
+    /**
+     * 根据类型查询项目列表，带项目下面的文章数
+     *
+     * @param type
+     * @param maxPosts
+     * @return
+     */
+    List<MetaDto> getMetaWhitContentList(String type, Integer maxPosts);
 }

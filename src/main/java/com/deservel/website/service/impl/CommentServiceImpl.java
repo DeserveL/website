@@ -15,13 +15,24 @@
  */
 package com.deservel.website.service.impl;
 
+import com.deservel.website.common.bean.ExceptionType;
+import com.deservel.website.common.exception.TipRestException;
+import com.deservel.website.common.utils.DateUtils;
+import com.deservel.website.common.utils.HtmlUtils;
+import com.deservel.website.config.WebSiteConst;
 import com.deservel.website.dao.CommentsMapper;
+import com.deservel.website.dao.ContentsMapper;
 import com.deservel.website.model.po.Comments;
+import com.deservel.website.model.po.Contents;
+import com.deservel.website.model.po.Users;
 import com.deservel.website.service.CommentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.vdurmont.emoji.EmojiParser;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
 import java.util.List;
@@ -36,6 +47,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     CommentsMapper commentsMapper;
+
+    @Autowired
+    ContentsMapper contentsMapper;
 
     /**
      * 获取评论列表
@@ -53,5 +67,133 @@ public class CommentServiceImpl implements CommentService {
         PageHelper.startPage(page, limit);
         List<Comments> comments = commentsMapper.selectByCondition(condition);
         return new PageInfo<>(comments);
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param coid
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteById(Integer coid) {
+        Comments comments = commentsMapper.selectByPrimaryKey(coid);
+        if (null == comments) {
+            throw new TipRestException(ExceptionType.COMMENT_COID_BLANK);
+        }
+
+        int i = commentsMapper.deleteByPrimaryKey(coid);
+        if (i > 0) {
+            //更新文章评论数
+            Contents ci = contentsMapper.selectByPrimaryKey(comments.getCid());
+            Contents contents = new Contents();
+            contents.setCid(ci.getCid());
+            contents.setCommentsNum(ci.getCommentsNum() - 1);
+            contentsMapper.updateByPrimaryKeySelective(contents);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 更新评论状态
+     *
+     * @param coid
+     * @param status
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateStatusByCoid(Integer coid, String status) {
+        Comments comments = new Comments();
+        comments.setCoid(coid);
+        comments.setStatus(status);
+        commentsMapper.updateByPrimaryKeySelective(comments);
+        return true;
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param coid
+     * @param content
+     * @param user
+     * @param remoteIp
+     * @return
+     */
+    @Override
+    public boolean replay(Integer coid, String content, Users user, String remoteIp) {
+        if (null == coid || StringUtils.isBlank(content)) {
+            throw new TipRestException(ExceptionType.COMMENT_COID_BLANK);
+        }
+        //长度
+        if (content.length() < WebSiteConst.MIN_COMMENT_COUNT || content.length() > WebSiteConst.MAX_COMMENT_COUNT) {
+            throw new TipRestException(ExceptionType.COMMENT_COUNT);
+        }
+        //父评论
+        Comments commentParent = commentsMapper.selectByPrimaryKey(coid);
+        if (null == commentParent) {
+            throw new TipRestException(ExceptionType.COMMENT_COID_BLANK);
+        }
+        //用户信息
+        if (null == user) {
+            throw new TipRestException(ExceptionType.USER_NOT_FOUND);
+        }
+        //回复内容处理
+        content = HtmlUtils.cleanXSS(content);
+        content = EmojiParser.parseToAliases(content);
+
+        Comments comments = new Comments();
+        comments.setAuthor(user.getUsername());
+        comments.setAuthorId(user.getUid());
+        comments.setCid(commentParent.getCid());
+        comments.setIp(remoteIp);
+        comments.setUrl(user.getHomeUrl());
+        comments.setContent(content);
+        if (StringUtils.isNotBlank(user.getEmail())) {
+            comments.setMail(user.getEmail());
+        } else {
+            comments.setMail("support@deservel.top");
+        }
+        comments.setParent(coid);
+        //保存
+        if (this.saveComment(comments)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 保存评论
+     *
+     * @param comments
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveComment(Comments comments) {
+        if (comments.getContent().length() < WebSiteConst.MIN_COMMENT_COUNT || comments.getContent().length() > WebSiteConst.MAX_COMMENT_COUNT) {
+            throw new TipRestException(ExceptionType.COMMENT_COUNT);
+        }
+        if (null == comments.getCid()) {
+            throw new TipRestException(ExceptionType.COMMENT_CID_BLANK);
+        }
+        Contents contents = contentsMapper.selectByPrimaryKey(comments.getCid());
+        if (null == contents) {
+            throw new TipRestException(ExceptionType.COMMENT_CONTENT_BLANK);
+        }
+
+        comments.setOwnerId(contents.getAuthorId());
+        comments.setCreated(DateUtils.getCurrentUnixTime());
+        comments.setCoid(null);
+        int i = commentsMapper.insertSelective(comments);
+        if (i > 0) {
+            Contents temp = new Contents();
+            temp.setCommentsNum(contents.getCommentsNum() + 1);
+            temp.setCid(contents.getCid());
+            contentsMapper.updateByPrimaryKeySelective(temp);
+            return true;
+        }
+        return false;
     }
 }

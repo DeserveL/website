@@ -51,4 +51,21 @@ public interface HtmlUtils {
         content = EmojiParser.parseToUnicode(content);
         return content;
     }
+
+    /**
+     * 替换HTML脚本
+     *
+     * @param value
+     * @return
+     */
+    static String cleanXSS(String value) {
+        //You'll need to remove the spaces from the html entities below
+        value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        value = value.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
+        value = value.replaceAll("'", "&#39;");
+        value = value.replaceAll("eval\\((.*)\\)", "");
+        value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
+        value = value.replaceAll("script", "");
+        return value;
+    }
 }

@@ -15,15 +15,15 @@
  */
 package com.deservel.website.controller.admin;
 
+import com.deservel.website.common.bean.RestResponse;
 import com.deservel.website.controller.AbstractBaseController;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.service.CommentService;
+import com.deservel.website.service.SiteService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author DeserveL
@@ -36,6 +36,9 @@ public class CommentController extends AbstractBaseController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    SiteService siteService;
 
     /**
      * 评论列表页面
@@ -54,5 +57,61 @@ public class CommentController extends AbstractBaseController {
         } catch (Exception e) {
             return errorPage(e);
         }
+    }
+
+    /**
+     * 删除一条评论
+     *
+     * @param coid
+     * @return
+     */
+    @PostMapping(value = "delete")
+    @ResponseBody
+    public RestResponse delete(@RequestParam Integer coid) {
+        boolean result = commentService.deleteById(coid);
+        if (!result) {
+            return RestResponse.fail("评论删除失败");
+        }
+        //清除后台配置缓存
+        siteService.cleanStatisticsCache();
+        return RestResponse.ok();
+    }
+
+    /**
+     * 更新评论状态
+     *
+     * @param coid
+     * @param status
+     * @return
+     */
+    @PostMapping(value = "status")
+    @ResponseBody
+    public RestResponse status(@RequestParam Integer coid, @RequestParam String status) {
+        boolean result = commentService.updateStatusByCoid(coid, status);
+        if (!result) {
+            return RestResponse.fail("操作失败");
+        }
+        //清除后台配置缓存
+        siteService.cleanStatisticsCache();
+        return RestResponse.ok();
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param coid
+     * @param content
+     * @return
+     */
+    @PostMapping(value = "")
+    @ResponseBody
+    public RestResponse replay(@RequestParam Integer coid, @RequestParam String content) {
+        boolean result = commentService.replay(coid, content, getUserByRequest(), getRemoteIp());
+        if (!result) {
+            return RestResponse.fail("回复失败");
+        }
+        //清除后台配置缓存
+        siteService.cleanStatisticsCache();
+        return RestResponse.ok();
     }
 }

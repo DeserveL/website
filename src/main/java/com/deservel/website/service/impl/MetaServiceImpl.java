@@ -19,14 +19,13 @@ import com.deservel.website.common.bean.ExceptionType;
 import com.deservel.website.common.exception.TipRestException;
 import com.deservel.website.dao.MetasMapper;
 import com.deservel.website.dao.RelationshipsMapper;
+import com.deservel.website.model.dto.MetaDto;
 import com.deservel.website.model.po.Metas;
 import com.deservel.website.model.po.Relationships;
 import com.deservel.website.service.MetaService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -74,6 +73,19 @@ public class MetaServiceImpl implements MetaService {
                 this.saveOrUpdate(cid, name, type);
             }
         }
+    }
+
+    /**
+     * 根据类型查询项目列表，带项目下面的文章数
+     *
+     * @param type
+     * @param maxPosts
+     * @return
+     */
+    @Override
+    public List<MetaDto> getMetaWhitContentList(String type, Integer maxPosts) {
+        List<MetaDto> metasList =  metasMapper.selectMetaWhitContentList(type, maxPosts);
+        return metasList;
     }
 
     /**

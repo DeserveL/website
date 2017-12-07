@@ -74,7 +74,22 @@ public interface WebSiteConst {
     int MAX_TEXT_COUNT = 200000;
 
     /**
+     * 评论最少可以输入的文字数
+     */
+    int MIN_COMMENT_COUNT = 5;
+
+    /**
+     * 评论最多可以输入的文字数
+     */
+    int MAX_COMMENT_COUNT = 2000;
+
+    /**
      * 路径最小长度
      */
     int MIN_SLUG_COUNT = 5;
+
+    /**
+     * 最大获取文章条数
+     */
+    int MAX_POSTS = 9999;
 }

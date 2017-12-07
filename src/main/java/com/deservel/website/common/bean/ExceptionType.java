@@ -43,7 +43,13 @@ public enum ExceptionType {
     CONTENTS_SLUG_PATH(707, "您输入的路径不合法"),
     CONTENTS_SLUG_EXIST(708, "该路径已经存在，请重新输入"),
 
-    MTEA_CID_BLANK(710, "项目关联id不能为空");
+    COMMENT_COID_BLANK(710, "不存在该评论"),
+    COMMENT_BLANK(711, "请输入完整后评论"),
+    COMMENT_COUNT(712, "请输入" + WebSiteConst.MIN_COMMENT_COUNT + "-"+ WebSiteConst.MAX_COMMENT_COUNT +"个字符内的回复"),
+    COMMENT_CID_BLANK(713, "评论文章不能为空"),
+    COMMENT_CONTENT_BLANK(714, "不存在的文章"),
+
+    MTEA_CID_BLANK(720, "项目关联id不能为空");
 
     private int code;
 

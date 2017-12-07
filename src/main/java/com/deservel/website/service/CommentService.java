@@ -16,6 +16,7 @@
 package com.deservel.website.service;
 
 import com.deservel.website.model.po.Comments;
+import com.deservel.website.model.po.Users;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -34,4 +35,40 @@ public interface CommentService {
      * @return
      */
     PageInfo<Comments> getCommentsWithPage(Integer uid, int page, int limit);
+
+    /**
+     * 删除评论
+     *
+     * @param coid
+     * @return
+     */
+    boolean deleteById(Integer coid);
+
+    /**
+     * 更新评论状态
+     *
+     * @param coid
+     * @param status
+     * @return
+     */
+    boolean updateStatusByCoid(Integer coid, String status);
+
+    /**
+     * 回复评论
+     *
+     * @param coid
+     * @param content
+     * @param userByRequest
+     * @param remoteIp
+     * @return
+     */
+    boolean replay(Integer coid, String content, Users userByRequest, String remoteIp);
+
+    /**
+     * 保存评论
+     *
+     * @param comments
+     * @return
+     */
+    boolean saveComment(Comments comments);
 }
