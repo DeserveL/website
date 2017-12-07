@@ -17,6 +17,7 @@ public class Metas {
      * 项目主键
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer mid;
 
     /**

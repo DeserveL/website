@@ -15,6 +15,7 @@
  */
 package com.deservel.website.config;
 
+import com.deservel.website.common.utils.HtmlUtils;
 import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Metas;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -131,6 +132,20 @@ public class ThymeleafCommons {
     public static String fmtdate(Integer unixTime, String patten) {
         if (null != unixTime && StringUtils.isNotBlank(patten)) {
             return DateFormatUtils.format(new Date(unixTime * 1000L), patten);
+        }
+        return "";
+    }
+
+    /**
+     * 显示文章内容，转换markdown为html
+     *
+     * @param value
+     * @return
+     */
+    public static String article(String value) {
+        if (StringUtils.isNotBlank(value)) {
+            value = value.replace("<!--more-->", "\r\n");
+            return HtmlUtils.mdToHtml(value);
         }
         return "";
     }

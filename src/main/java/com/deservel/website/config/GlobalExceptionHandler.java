@@ -1,11 +1,11 @@
 package com.deservel.website.config;
 
 import com.deservel.website.common.bean.RestResponse;
-import com.deservel.website.common.exception.TipPageException;
 import com.deservel.website.common.exception.TipRestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,14 +27,6 @@ public class GlobalExceptionHandler implements ErrorController {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final static String ERROR_PATH = "/error";
 
-    @ExceptionHandler(value = TipPageException.class)
-    public String tipPageException(TipPageException e, HttpServletRequest request) {
-        logger.error("find exception:e={}", e.getMessage());
-        request.setAttribute("code", e.getCode());
-        request.setAttribute("message", e.getMessage());
-        return "comm/error_500";
-    }
-
     @ExceptionHandler(value = TipRestException.class)
     @ResponseBody
     public RestResponse tipRestException(TipRestException e) {
@@ -43,11 +35,11 @@ public class GlobalExceptionHandler implements ErrorController {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public String exception(Exception e) {
-        logger.error("find exception:e={}", e.getMessage());
-        return "comm/error_404";
+    @ResponseBody
+    public RestResponse exception(Exception e) {
+        logger.error("find exception:", e);
+        return RestResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
-
 
     /**
      * Supports the HTML Error View

@@ -16,57 +16,41 @@
 package com.deservel.website.controller.admin;
 
 import com.deservel.website.controller.AbstractBaseController;
-import com.deservel.website.model.dto.Statistics;
 import com.deservel.website.model.po.Comments;
-import com.deservel.website.model.po.Contents;
-import com.deservel.website.model.po.Logs;
-import com.deservel.website.service.LogService;
-import com.deservel.website.service.SiteService;
+import com.deservel.website.service.CommentService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 后台管理首页
- *
  * @author DeserveL
- * @date 2017/11/30 16:39
+ * @date 2017/12/7 16:55
  * @since 1.0.0
  */
 @Controller
-@RequestMapping("/admin")
-public class IndexController extends AbstractBaseController {
+@RequestMapping("admin/comments")
+public class CommentController extends AbstractBaseController {
 
     @Autowired
-    SiteService siteService;
-    @Autowired
-    LogService logService;
+    CommentService commentService;
 
     /**
-     * 后台首页
+     * 评论列表页面
      *
+     * @param page
+     * @param limit
      * @return
      */
-    @GetMapping(value = {"","/index"})
-    public String index(){
+    @GetMapping(value = "")
+    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+                        @RequestParam(value = "limit", defaultValue = "15") int limit) {
         try {
-            //最新的5条评论
-            List<Comments> comments = siteService.recentComments(5);
-            //最新的5跳文章
-            List<Contents> contents = siteService.recentContents(5);
-            //获取后台统计数据
-            Statistics statistics = siteService.getStatistics();
-            // 取最新的20条日志
-            List<Logs> logs = logService.getLogs(1, 5);
-
-            setRequestAttribute("comments", comments);
-            setRequestAttribute("articles", contents);
-            setRequestAttribute("statistics", statistics);
-            setRequestAttribute("logs", logs);
-            return "admin/index";
+            PageInfo<Comments> commentsPaginator = commentService.getCommentsWithPage(this.getUserByRequest().getUid(), page, limit);
+            setRequestAttribute("comments", commentsPaginator);
+            return "admin/comment_list";
         } catch (Exception e) {
             return errorPage(e);
         }

@@ -62,4 +62,19 @@ public interface WebSiteConst {
      * 后台统计数据缓存时间
      */
     int STATISTICS_TIME = 10*60*60;
+
+    /**
+     * 文章标题最多可以输入的文字个数
+     */
+    int MAX_TITLE_COUNT = 200;
+
+    /**
+     * 文章最多可以输入的文字数
+     */
+    int MAX_TEXT_COUNT = 200000;
+
+    /**
+     * 路径最小长度
+     */
+    int MIN_SLUG_COUNT = 5;
 }

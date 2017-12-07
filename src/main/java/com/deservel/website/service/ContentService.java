@@ -41,4 +41,30 @@ public interface ContentService {
      * @return
      */
     Contents getContents(String cid);
+
+    /**
+     * 添加文章
+     *
+     * @param contents
+     * @return
+     */
+    boolean publish(Contents contents);
+
+    /**
+     * 修改文章
+     *
+     * @param contents
+     * @return
+     */
+    boolean updateArticle(Contents contents);
+
+    /**
+     * 删除文章操作
+     *
+     * @param cid
+     * @param uid
+     * @param remoteIp
+     * @return
+     */
+    boolean deleteByCid(Integer cid, Integer uid, String remoteIp);
 }

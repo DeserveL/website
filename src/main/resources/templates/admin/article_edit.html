@@ -186,7 +186,7 @@
                             <div class="form-group col-md-3">
                                 <label class="col-sm-5">添加缩略图</label>
                                 <div class="col-sm-7">
-                                    <div id="thumb-toggle" class="toggle toggle-success" on="false" th:thumb_url="${contents!=null and contents.thumbImg !=null}?${contents.thumbImg}: ''" onclick="add_thumbimg(this);"></div>
+                                    <div id="thumb-toggle" class="toggle toggle-success" on="false" th:attr="thumb_url=${contents!=null and contents.thumbImg !=null}?${contents.thumbImg}: ''" onclick="add_thumbimg(this);"></div>
                                 </div>
                             </div>
 

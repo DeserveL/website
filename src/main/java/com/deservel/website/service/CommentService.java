@@ -15,45 +15,23 @@
  */
 package com.deservel.website.service;
 
-import com.deservel.website.model.dto.Statistics;
 import com.deservel.website.model.po.Comments;
-import com.deservel.website.model.po.Contents;
-
-import java.util.List;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author DeserveL
- * @date 2017/11/30 16:51
+ * @date 2017/12/7 16:59
  * @since 1.0.0
  */
-public interface SiteService {
+public interface CommentService {
 
     /**
-     * 最新收到的评论
+     * 获取评论列表
      *
+     * @param uid
+     * @param page
      * @param limit
      * @return
      */
-    List<Comments> recentComments(Integer limit);
-
-    /**
-     * 最新发表的文章
-     *
-     * @param limit
-     * @return
-     */
-    List<Contents> recentContents(Integer limit);
-
-    /**
-     * 获取后台统计数据
-     *
-     * @return
-     */
-    Statistics getStatistics();
-
-    /**
-     * 清除后台统计数据缓存
-     *
-     */
-    void cleanStatisticsCache();
+    PageInfo<Comments> getCommentsWithPage(Integer uid, int page, int limit);
 }

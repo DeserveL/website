@@ -32,9 +32,18 @@ public enum ExceptionType {
     USER_NOT_FOUND(603, "用户不存在"),
     USERNAME_PASSWORD_ERROR(604, "用户名或密码错误"),
     ID_NOT_ONE(605, "query content by id and return is not one"),
-    DATA_NOT_FOUND(404, "数据未找到"),
-    PARAMETER_ILLEGAL(403, "参数无效"),
-    ARTICLE_THUMBUP_ERROR(603, "已经点过赞");
+
+    CONTENTS_ALL_BLANK(700, "文章对象为空"),
+    CONTENTS_TITLE(701, "文章标题不能为空"),
+    CONTENTS_TITLE_LENGTH(702, "文章标题最多可以输入" + WebSiteConst.MAX_TITLE_COUNT + "个字符"),
+    CONTENTS_BLANK(703, "文章内容不能为空"),
+    CONTENTS_BLANK_LENGTH(704, "文章内容最多可以输入" + WebSiteConst.MAX_TEXT_COUNT + "个字符"),
+    CONTENTS_LOGIN(705, "请登录后发布文章"),
+    CONTENTS_SLUG_LENGTH(706, "路径不能少于" + WebSiteConst.MIN_SLUG_COUNT + "个字符"),
+    CONTENTS_SLUG_PATH(707, "您输入的路径不合法"),
+    CONTENTS_SLUG_EXIST(708, "该路径已经存在，请重新输入"),
+
+    MTEA_CID_BLANK(710, "项目关联id不能为空");
 
     private int code;
 

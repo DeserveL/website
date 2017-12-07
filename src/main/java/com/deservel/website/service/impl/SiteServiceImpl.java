@@ -29,6 +29,7 @@ import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Metas;
 import com.deservel.website.service.SiteService;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Condition;
@@ -129,5 +130,14 @@ public class SiteServiceImpl implements SiteService {
         //加入缓存
         cache.set(Types.C_STATISTICS, statistics, WebSiteConst.STATISTICS_TIME);
         return statistics;
+    }
+
+    /**
+     * 清除后台统计数据缓存
+     *
+     */
+    @Override
+    public void cleanStatisticsCache(){
+        cache.del(Types.C_STATISTICS);
     }
 }

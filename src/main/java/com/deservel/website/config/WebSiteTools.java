@@ -24,6 +24,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 网站公用方法类
@@ -33,6 +35,8 @@ import javax.servlet.http.HttpSession;
  * @since 1.0.0
  */
 public class WebSiteTools {
+
+    private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
 
     /**
      * 返回当前登录用户
@@ -99,7 +103,6 @@ public class WebSiteTools {
         CookieUtils.setCookie(response, WebSiteConst.USER_IN_COOKIE, val);
     }
 
-
     /**
      * 删除cookie登录信息
      *
@@ -107,5 +110,22 @@ public class WebSiteTools {
      */
     public static void removeCookieUid(HttpServletResponse response) {
         CookieUtils.removeCookie(response, WebSiteConst.USER_IN_COOKIE);
+    }
+
+    /**
+     * 判断是否是合法路径
+     *
+     * @param slug
+     * @return
+     */
+    public static boolean isPath(String slug) {
+        if (StringUtils.isNotBlank(slug)) {
+            if (slug.contains("/") || slug.contains(" ") || slug.contains(".")) {
+                return false;
+            }
+            Matcher matcher = SLUG_REGEX.matcher(slug);
+            return matcher.find();
+        }
+        return false;
     }
 }

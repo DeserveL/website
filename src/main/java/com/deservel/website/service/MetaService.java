@@ -33,4 +33,13 @@ public interface MetaService {
      * @return
      */
     List<Metas> getMetas(String type);
+
+    /**
+     * 保存多个项目
+     *
+     * @param cid
+     * @param names
+     * @param type
+     */
+    void saveMetas(Integer cid, String names, String type);
 }

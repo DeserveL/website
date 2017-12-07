@@ -17,6 +17,7 @@ public class Contents {
      * post表主键
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cid;
 
     /**

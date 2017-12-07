@@ -15,7 +15,10 @@
  */
 package com.deservel.website.controller;
 
+import com.deservel.website.common.exception.TipPageException;
 import com.deservel.website.common.utils.IpUtils;
+import com.deservel.website.config.WebSiteTools;
+import com.deservel.website.model.po.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -176,5 +179,27 @@ public abstract class AbstractBaseController {
      */
     protected String getRemoteIp() {
         return IpUtils.getIpAddrByRequest(getRequest());
+    }
+
+    /**
+     * 获取请求绑定的登录对象
+     *
+     * @return
+     */
+    public Users getUserByRequest() {
+        return WebSiteTools.getLoginUser(getRequest());
+    }
+
+    /**
+     * 页面跳转异常
+     *
+     * @param e
+     * @return
+     */
+    public String errorPage(Exception e){
+        logger.error("页面获取失败",e);
+        getRequest().setAttribute("code", 500);
+        getRequest().setAttribute("message", e.getMessage());
+        return "comm/error_500";
     }
 }

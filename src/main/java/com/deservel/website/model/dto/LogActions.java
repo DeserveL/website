@@ -1,5 +1,6 @@
 package com.deservel.website.model.dto;
 
+import com.deservel.website.common.utils.DateUtils;
 import com.deservel.website.model.po.Logs;
 
 /**
@@ -39,7 +40,7 @@ public interface LogActions {
         logs.setData(data);
         logs.setAuthorId(authorId);
         logs.setIp(ip);
-        logs.setCreated((int) (System.currentTimeMillis() / 1000L));
+        logs.setCreated(DateUtils.getCurrentUnixTime());
         return logs;
     }
 }
