@@ -1,6 +1,12 @@
-#include('./header.html',{has_sub:'other', active:'page', title:'保存页面'})
-<link href="/static/admin/plugins/toggles/toggles.css" rel="stylesheet">
-#call cdn_url('article_edit_head')
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存页面',active='page',has_sub=''">
+<header th:replace="admin/header::headerFragment(${title},${active},${has_sub})"></header>
+<link href="/admin/plugins/toggles/toggles.css" rel="stylesheet"/>
+<link href="/admin/plugins/multi-select/0.9.12/css/multi-select.min.css" rel="stylesheet"/>
+<link href="/admin/plugins/select2/3.4.8/select2.min.css" rel="stylesheet"/>
+<link href="/admin/plugins/mditor/css/mditor.min.css" rel="stylesheet"/>
+<link href="/admin/plugins/summernote/0.8.2/summernote.css" rel="stylesheet"/>
+<link href="/admin/plugins/dropzone/4.3.0/min/dropzone.min.css" rel="stylesheet"/>
 <style rel="stylesheet">
     .mditor .editor{
         font-size: 14px;
@@ -29,73 +35,102 @@
         border: none;
     }
 </style>
-<div class="row">
-    <div class="col-sm-12">
-        <h4 class="page-title">
-            #if(null != contents)
-            编辑页面
-            #else
-            发布新页面
-            #end
-        </h4>
-    </div>
-    <div class="col-md-12">
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">
+                            <th:block th:if="${null != contents}">
+                                编辑页面
+                            </th:block>
+                            <th:block th:unless="${null != contents}">
+                                发布新页面
+                            </th:block>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <!--TODO attach_url-->
+                        <input type="hidden" id="attach_url" th:value="${attach_url}"/>
 
-        <input type="hidden" id="attach_url" value="${attach_url}" />
+                        <form id="articleForm" role="form" novalidate="novalidate">
+                            <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
+                            <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
+                            <input type="hidden" name="content" id="content-editor"/>
+                            <input type="hidden" name="fmtType" id="fmtType" th:value="${contents!=null and contents.fmtType !=null}?${contents.fmtType}: 'markdown'"/>
+                            <input type="hidden" name="allowComment" th:value="${contents!=null and contents.allowComment !=null}?${contents.allowComment}: true" id="allowComment"/>
 
-        <form id="articleForm" role="form" novalidate="novalidate">
-            <input type="hidden" name="cid" value="${contents.cid ?! ''}" id="cid"/>
-            <input type="hidden" name="status" value="${contents.status ?! 'draft'}" id="status"/>
-            <input type="hidden" name="content" id="content-editor"/>
-            <input type="hidden" name="fmtType" id="fmtType" value="${contents.fmtType ?! 'markdown'}"/>
-            <input type="hidden" name="allowComment" value="${contents.allowComment ?! true}" id="allowComment"/>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请输入页面标题" name="title" required=""
+                                       aria-required="true"  th:value="${contents!=null and contents.title!=null }?${contents.title}: ''"/>
+                            </div>
 
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="请输入页面标题" name="title" required=""
-                       aria-required="true" value="${contents.title ?! ''}"/>
-            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请输入页面访问名" name="slug" required=""
+                                       aria-required="true" th:value="${contents!=null and contents.slug !=null}?${contents.slug}: ''"/>
+                            </div>
 
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="请输入页面访问名" name="slug" required=""
-                       aria-required="true" value="${contents.slug ?! ''}"/>
-            </div>
+                            <div class="form-group col-xs-12">
+                                <div class="pull-right">
+                                    <a id="switch-btn" href="javascript:void(0)" class="btn btn-purple btn-sm waves-effect waves-light switch-editor">
+                                        <th:block th:if="${contents!=null and contents.fmtType =='html'}">
+                                            切换为Markdown编辑器
+                                        </th:block>
+                                        <th:block th:unless="${contents!=null and contents.fmtType =='html'}">
+                                            切换为富文本编辑器
+                                        </th:block>
+                                    </a>
+                                </div>
+                            </div>
 
-            <div class="form-group col-xs-12">
-                <div class="pull-right">
-                    <a id="switch-btn" href="javascript:void(0)" class="btn btn-purple btn-sm waves-effect waves-light switch-editor">#if(null != contents &&
-                        contents.fmtType == 'html') 切换为Markdown编辑器 #else 切换为富文本编辑器 #end</a>
+                            <div id="md-container" class="form-group col-md-12">
+                                <textarea id="md-editor" th:class="${null != contents and contents.fmtType == 'html'}? hide : ''" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                            </div>
+                            <div id="html-container" class="form-group col-md-12">
+                                <div class="summernote">
+                                    <th:block th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''">
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">开启评论</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and contents.allowComment!=null }?'toggle toggle-success allow-'+${contents.allowComment}:'toggle toggle-success allow-true'"
+                                         onclick="allowComment(this);" th:attr="on=${contents!=null and contents.allowComment!=null }?${contents.allowComment}:true"></div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="text-right">
+                                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="subArticle('publish');">保存页面</button>
+                                <button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">存为草稿</button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
+                <div th:replace="admin/footer :: footer-content"></div>
             </div>
-
-            <div id="md-container" class="form-group col-md-12">
-                <textarea id="md-editor" class="#if(null != contents && contents.fmtType == 'html') hide #end">${contents.content ?! ''}</textarea>
-            </div>
-            <div id="html-container" class="form-group col-md-12">
-                <div class="summernote">${contents.content ?! ''}</div>
-            </div>
-
-            <div class="form-group col-md-3 col-sm-4">
-                <label class="col-sm-4">开启评论</label>
-                <div class="col-sm-8">
-                    <div class="toggle toggle-success allow-${contents.allowComment ?! true}"
-                         onclick="allowComment(this);" on="${contents.allowComment ?! true}"></div>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <div class="text-right">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="subArticle('publish');">保存页面</button>
-                <button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">存为草稿</button>
-            </div>
-        </form>
+        </div>
     </div>
-
 </div>
-#include('./footer.html')
-
-#call cdn_url('article_edit_foot')
+<div th:replace="admin/footer :: footer"></div>
+<script src="/admin/plugins/mditor/js/mditor.min.js"></script>
+<script src="/admin/plugins/wysihtml5/0.3.0/wysihtml5.min.js"></script>
+<script src="/admin/plugins/summernote/0.8.2/summernote.min.js"></script>
+<script src="/admin/plugins/summernote/0.8.2/lang/summernote-zh-CN.min.js"></script>
+<script src="/admin/plugins/multi-select/0.9.12/js/jquery.multi-select.min.js"></script>
+<script src="/admin/plugins/select2/3.4.8/select2.min.js"></script>
+<script src="/admin/plugins/jquery-toggles/2.0.4/toggles.min.js"></script>
+<script src="/admin/plugins/dropzone/4.3.0/min/dropzone.min.js"></script>
+<script src="/admin/plugins/to-markdown/3.1.0/to-markdown.min.js"></script>
 <script type="text/javascript">
+    /*<![CDATA[*/
     var mditor, htmlEditor;
     var tale = new $.tale();
     var attach_url = $('#attach_url').val();
@@ -165,12 +200,22 @@
             var this_ = $(this);
             if (type == 'markdown') {
                 // 切换为富文本编辑器
+                if($('#md-container .markdown-body').html().length > 0){
+                    $('#html-container .note-editable').empty().html($('#md-container .markdown-body').html());
+                    $('#html-container .note-placeholder').hide();
+
+                }
+                // 切换为富文本编辑器
                 mditor.value = '';
                 $('#md-container').hide();
                 $('#html-container').show();
                 this_.text('切换为Markdown编辑器');
                 $('#fmtType').val('html');
             } else {
+                if($('#html-container .note-editable').html().length > 0){
+                    mditor.value = '';
+                    mditor.value = toMarkdown($('#html-container .note-editable').html());
+                }
                 // 切换为markdown编辑器
                 $('#html-container').hide();
                 $('#md-container').show();
@@ -277,6 +322,7 @@
             $('#allowComment').val('true');
         }
     }
+    /*]]>*/
 </script>
 </body>
 </html>

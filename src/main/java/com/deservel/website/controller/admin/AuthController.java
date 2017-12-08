@@ -84,7 +84,7 @@ public class AuthController extends AbstractBaseController {
         try {
             WebSiteTools.removeLoginUser(getRequest());
             WebSiteTools.removeCookieUid(getResponse());
-            getResponse().sendRedirect("admin/login");
+            getResponse().sendRedirect("/admin/login");
         } catch (IOException e) {
             logger.error("注销失败",e);
         }

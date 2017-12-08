@@ -35,6 +35,15 @@ public interface ContentService {
     PageInfo<Contents> getArticlesWithPage(Integer page, Integer limit);
 
     /**
+     * 获取页面列表
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    PageInfo<Contents> getPagesWithPage(Integer page, Integer limit);
+
+    /**
      * 获取文章详情
      *
      * @param cid
@@ -64,7 +73,8 @@ public interface ContentService {
      * @param cid
      * @param uid
      * @param remoteIp
+     * @param type
      * @return
      */
-    boolean deleteByCid(Integer cid, Integer uid, String remoteIp);
+    boolean deleteByCid(Integer cid, Integer uid, String remoteIp, String type);
 }

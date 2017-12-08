@@ -54,6 +54,16 @@ public interface WebSiteConst {
     int PASSWORD_ERROR_COUNT = 3;
 
     /**
+     * 密码最小长度
+     */
+    int PASSWORD_MIN_COUNT = 6;
+
+    /**
+     * 密码最大长度
+     */
+    int PASSWORD_MAX_COUNT = 14;
+
+    /**
      * 密码错误时间（s）
      */
     int PASSWORD_ERROR_TIME = 10*60;

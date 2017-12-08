@@ -15,18 +15,26 @@
  */
 package com.deservel.website.controller.admin;
 
+import com.deservel.website.common.bean.RestResponse;
+import com.deservel.website.config.WebSiteConst;
+import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.controller.AbstractBaseController;
+import com.deservel.website.model.dto.LogActions;
 import com.deservel.website.model.dto.Statistics;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Logs;
+import com.deservel.website.model.po.Users;
 import com.deservel.website.service.LogService;
 import com.deservel.website.service.SiteService;
+import com.deservel.website.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -44,14 +52,16 @@ public class IndexController extends AbstractBaseController {
     SiteService siteService;
     @Autowired
     LogService logService;
+    @Autowired
+    UserService userService;
 
     /**
      * 后台首页
      *
      * @return
      */
-    @GetMapping(value = {"","/index"})
-    public String index(){
+    @GetMapping(value = {"", "/index"})
+    public String index() {
         try {
             //最新的5条评论
             List<Comments> comments = siteService.recentComments(5);
@@ -70,5 +80,46 @@ public class IndexController extends AbstractBaseController {
         } catch (Exception e) {
             return errorPage(e);
         }
+    }
+
+    /**
+     * 个人设置页面
+     */
+    @GetMapping(value = "profile")
+    public String profile() {
+        return "admin/profile";
+    }
+
+    /**
+     * 保存个人信息
+     */
+    @PostMapping(value = "profile")
+    @ResponseBody
+    public RestResponse saveProfile(@RequestParam(value = "screen_name") String screenName, @RequestParam String email) {
+        Users user = getUserByRequest();
+        boolean result = userService.updateProfile(user.getUid(), screenName, email, getRemoteIp());
+        if (!result) {
+            return RestResponse.fail("更新信息失败");
+        }
+        //更新session中的数据
+        user.setScreenName(screenName);
+        user.setEmail(email);
+        WebSiteTools.setLoginUser(getRequest(), user);
+
+        return RestResponse.ok();
+    }
+
+    /**
+     * 修改密码
+     */
+    @PostMapping(value = "/password")
+    @ResponseBody
+    public RestResponse upPwd(@RequestParam String oldPassword, @RequestParam String password) {
+        Users user = getUserByRequest();
+        boolean result = userService.upPwd(user, oldPassword, password, getRemoteIp());
+        if (!result) {
+            return RestResponse.fail("密码修改失败");
+        }
+        return RestResponse.ok();
     }
 }

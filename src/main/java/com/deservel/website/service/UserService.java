@@ -33,4 +33,26 @@ public interface UserService {
      * @return
      */
     Users queryUserById(Integer uid);
+
+    /**
+     * 更新个人信息
+     *
+     * @param uid
+     * @param screenName
+     * @param email
+     * @param remoteIp
+     * @return
+     */
+    boolean updateProfile(Integer uid, String screenName, String email, String remoteIp);
+
+    /**
+     * 更新密码
+     *
+     * @param user
+     * @param oldPassword
+     * @param password
+     * @param remoteIp
+     * @return
+     */
+    boolean upPwd(Users user, String oldPassword, String password, String remoteIp);
 }

@@ -89,6 +89,23 @@ public class ContentServiceImpl implements ContentService {
     }
 
     /**
+     * 获取页面列表
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public PageInfo<Contents> getPagesWithPage(Integer page, Integer limit) {
+        Condition condition = new Condition(Contents.class);
+        condition.setOrderByClause("created desc");
+        condition.createCriteria().andEqualTo("type", Types.PAGE);
+        PageHelper.startPage(page, limit);
+        List<Contents> contents = contentsMapper.selectByCondition(condition);
+        return new PageInfo<>(contents);
+    }
+
+    /**
      * 获取文章详情
      *
      * @param cid
@@ -177,11 +194,12 @@ public class ContentServiceImpl implements ContentService {
      * @param cid
      * @param uid
      * @param remoteIp
+     * @param type
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteByCid(Integer cid, Integer uid, String remoteIp) {
+    public boolean deleteByCid(Integer cid, Integer uid, String remoteIp, String type) {
         if (null != cid) {
             int i = contentsMapper.deleteByPrimaryKey(cid);
             if (i > 0) {
@@ -190,7 +208,13 @@ public class ContentServiceImpl implements ContentService {
                 relationships.setCid(cid);
                 relationshipsMapper.delete(relationships);
                 //记录日志
-                Logs logs = LogActions.logInstance(LogActions.DEL_ARTICLE, cid + "", uid, remoteIp);
+                String action = "";
+                if(Types.ARTICLE.equals(type)){
+                    action = LogActions.DEL_ARTICLE;
+                }else if(Types.PAGE.equals(type)){
+                    action = LogActions.DEL_PAGE;
+                }
+                Logs logs = LogActions.logInstance(action, cid + "", uid, remoteIp);
                 logsMapper.insert(logs);
                 return true;
             }

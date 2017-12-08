@@ -32,6 +32,9 @@ public enum ExceptionType {
     USER_NOT_FOUND(603, "用户不存在"),
     USERNAME_PASSWORD_ERROR(604, "用户名或密码错误"),
     ID_NOT_ONE(605, "query content by id and return is not one"),
+    PASSWORD_BLANK(606, "请确认信息输入完整"),
+    OLD_PASSWORD_ERROR(607, "旧密码错误"),
+    PASSWORD_LEN(608, "请输入" + WebSiteConst.PASSWORD_MIN_COUNT + "-" + WebSiteConst.PASSWORD_MAX_COUNT + "位密码"),
 
     CONTENTS_ALL_BLANK(700, "文章对象为空"),
     CONTENTS_TITLE(701, "文章标题不能为空"),
