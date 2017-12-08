@@ -52,4 +52,22 @@ public interface MetaService {
      * @return
      */
     List<MetaDto> getMetaWhitContentList(String type, Integer maxPosts);
+
+    /**
+     * 保存或修改分类
+     *
+     * @param type
+     * @param name
+     * @param mid
+     * @return
+     */
+    boolean saveMeta(String type, String name, Integer mid);
+
+    /**
+     * 删除分类
+     *
+     * @param mid
+     * @return
+     */
+    boolean deleteMeta(Integer mid);
 }

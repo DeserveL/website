@@ -49,7 +49,9 @@ public enum ExceptionType {
     COMMENT_CID_BLANK(713, "评论文章不能为空"),
     COMMENT_CONTENT_BLANK(714, "不存在的文章"),
 
-    MTEA_CID_BLANK(720, "项目关联id不能为空");
+    MTEA_CID_BLANK(720, "项目关联id不能为空"),
+    MTEA_EXIST(721, "已经存在该项"),
+    MTEA_NOT_EXIST(722, "此mid不存在");
 
     private int code;
 
