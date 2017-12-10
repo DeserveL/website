@@ -127,7 +127,7 @@ public class PageController extends AbstractBaseController {
         if (!result) {
             return RestResponse.fail("修改页面失败！");
         }
-        return RestResponse.ok();
+        return RestResponse.ok(contents.getCid());
     }
 
     /**

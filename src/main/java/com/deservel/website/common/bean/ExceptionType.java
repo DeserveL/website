@@ -54,7 +54,9 @@ public enum ExceptionType {
 
     MTEA_CID_BLANK(720, "项目关联id不能为空"),
     MTEA_EXIST(721, "已经存在该项"),
-    MTEA_NOT_EXIST(722, "此mid不存在");
+    MTEA_NOT_EXIST(722, "此mid不存在"),
+
+    ATTACH_NOT_EXIST(730,"不存在该附件");
 
     private int code;
 

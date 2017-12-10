@@ -118,7 +118,7 @@ $(document).ready(function () {
         }
     });
 
-    if($('#thumb-toggle').attr('thumb_url') != ''){
+    if($('#thumb-toggle').attr('thumb_url') != '' && typeof($('#thumb-toggle').attr('thumb_url'))!="undefined"){
         $('#thumb-toggle').toggles({
             on: true,
             text: {
@@ -127,9 +127,13 @@ $(document).ready(function () {
             }
         });
         $('#thumb-toggle').attr('on', 'true');
-        $('#dropzone').css('background-image', 'url('+ $('#thumb-container').attr('thumb_url') +')');
-        $('#dropzone').css('background-size', 'cover');
+        $('#dropzone-container').removeClass('hide');
         $('#dropzone-container').show();
+        var url = attach_url + $('#thumb-toggle').attr('thumb_url');
+        $('#dropzone').css('background-image', 'url('+ url +')');
+        $('#dropzone').css('background-size', 'cover');
+        $('.dz-image').hide();
+        $('#thumbImg').val(url);
     } else {
         $('#thumb-toggle').toggles({
             off: true,

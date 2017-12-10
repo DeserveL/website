@@ -18,6 +18,7 @@ package com.deservel.website.config;
 import com.deservel.website.common.utils.HtmlUtils;
 import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Metas;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -63,6 +64,35 @@ public class ThymeleafCommons {
         }
         String hash = DigestUtils.md5Hex(email.trim().toLowerCase());
         return avatarUrl + hash + ".png";
+    }
+
+    /**
+     * 网站配置项
+     *
+     * @param key
+     * @return
+     */
+    public static String site_option(String key) {
+        return site_option(key, "");
+    }
+
+    /**
+     * 网站配置项
+     *
+     * @param key
+     * @param defalutValue 默认值
+     * @return
+     */
+    public static String site_option(String key, String defalutValue) {
+        if (StringUtils.isBlank(key)) {
+            return "";
+        }
+        String str = WebSiteConst.OPTIONS.get(key);
+        if (StringUtils.isNotBlank(str)) {
+            return str;
+        } else {
+            return defalutValue;
+        }
     }
 
     /**
@@ -160,5 +190,29 @@ public class ThymeleafCommons {
     public static String rand_color() {
         int r = RandomUtils.nextInt(0, COLORS.length - 1);
         return COLORS[r];
+    }
+
+    /**
+     * 截取字符串
+     *
+     * @param str
+     * @param len
+     * @return
+     */
+    public static String substr(String str, int len) {
+        if (str != null && str.length() > len) {
+            return str.substring(0, len);
+        }
+        return str;
+    }
+
+    /**
+     * 判断分页中是否有数据
+     *
+     * @param paginator
+     * @return
+     */
+    public static boolean is_empty(PageInfo paginator) {
+        return paginator == null || (paginator.getList() == null) || (paginator.getList().size() == 0);
     }
 }

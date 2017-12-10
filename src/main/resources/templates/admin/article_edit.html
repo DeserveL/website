@@ -95,11 +95,11 @@
                     </div>
                     <div class="col-md-12">
                         <!--TODO attach_url-->
-                        <input type="hidden" id="attach_url" value="${attach_url}" />
+                        <input type="hidden" id="attach_url" th:value="${attach_url}" />
                         <form id="articleForm">
                             <input type="hidden" name="categories" id="categories"/>
                             <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
-                            <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
+                            <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'draft'" id="status"/>
                             <input type="hidden" name="allowComment" th:value="${contents!=null and contents.allowComment !=null}?${contents.allowComment}: true" id="allowComment"/>
                             <input type="hidden" name="allowPing" th:value="${contents!=null and contents.allowPing !=null}?${contents.allowPing}: true" id="allowPing"/>
                             <input type="hidden" name="allowFeed" th:value="${contents!=null and contents.allowFeed !=null}?${contents.allowFeed}: true" id="allowFeed"/>

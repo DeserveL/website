@@ -58,7 +58,7 @@
 
                         <form id="articleForm" role="form" novalidate="novalidate">
                             <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
-                            <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
+                            <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'draft'" id="status"/>
                             <input type="hidden" name="content" id="content-editor"/>
                             <input type="hidden" name="fmtType" id="fmtType" th:value="${contents!=null and contents.fmtType !=null}?${contents.fmtType}: 'markdown'"/>
                             <input type="hidden" name="allowComment" th:value="${contents!=null and contents.allowComment !=null}?${contents.allowComment}: true" id="allowComment"/>

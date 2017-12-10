@@ -15,6 +15,9 @@
  */
 package com.deservel.website.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 网站配置表
  *
@@ -23,6 +26,8 @@ package com.deservel.website.config;
  * @since 1.0.0
  */
 public interface WebSiteConst {
+    Map<String, String> OPTIONS = new HashMap<>();
+
     /**
      * 用户session key
      */
@@ -102,4 +107,9 @@ public interface WebSiteConst {
      * 最大获取文章条数
      */
     int MAX_POSTS = 9999;
+
+    /**
+     * 上传文件最大20M
+     */
+    Integer MAX_FILE_SIZE = 204800;
 }

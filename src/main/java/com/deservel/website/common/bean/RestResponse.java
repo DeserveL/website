@@ -1,5 +1,6 @@
 package com.deservel.website.common.bean;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
