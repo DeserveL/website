@@ -1,27 +1,40 @@
-#include('./header.html',{has_sub:'other', active:'template', title:'编辑模板'})
-<div class="row">
-    <div class="col-sm-12">
-        <h4 class="page-title">编辑模板</h4>
-    </div>
-    <div class="col-md-12">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='编辑模板',active='template',has_sub='other'">
+<header th:replace="admin/header::headerFragment(${title},${active},${has_sub})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">编辑模板</h4>
+                    </div>
+                    <div class="col-md-12">
 
-        <select id="tplSelect" onchange="showContent(this)">
-            <option selected value="">请选择模板文件</option>
-            #for(tpl : tpls)
-            <option value="${tpl}">${tpl}</option>
-            #end
-        </select>
+                        <select id="tplSelect" onchange="showContent(this)">
+                            <option selected="true" value="">请选择模板文件</option>
+                            <th:block th:each="tpl : ${tpls}">
+                                <option th:value="${tpl}" th:text="${tpl}"></option>
+                            </th:block>
+                        </select>
 
-        <button class="btn btn-primary waves-effect waves-light m-b-5" onclick="saveTpl()">保存修改</button>
+                        <button class="btn btn-primary waves-effect waves-light m-b-5" onclick="saveTpl()">保存修改</button>
 
-        <div>
-            <textarea id="tpl-preview" rows="20" cols="100%" placeholder="选择模板后进行修改"></textarea>
+                        <div>
+                            <textarea id="tpl-preview" rows="20" cols="100%" placeholder="选择模板后进行修改"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="admin/footer :: footer-content"></div>
+            </div>
         </div>
     </div>
 </div>
-
-#include('./footer.html')
+<div th:replace="admin/footer :: footer"></div>
 <script>
+    /*<![CDATA[*/
     var tale = new $.tale();
 
     function showContent(obj) {
@@ -54,6 +67,7 @@
             });
         }
     }
+    /*]]>*/
 </script>
 </body>
 </html>

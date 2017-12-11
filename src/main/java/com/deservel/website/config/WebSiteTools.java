@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +45,10 @@ import java.util.regex.Pattern;
  * @since 1.0.0
  */
 public class WebSiteTools {
+    /**
+     * 整个网站配置项
+     */
+    public static Map<String, String> OPTIONS = new HashMap<>();
 
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
 

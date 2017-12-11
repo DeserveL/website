@@ -269,6 +269,8 @@ public class ContentServiceImpl implements ContentService {
                     throw new TipRestException(ExceptionType.CONTENTS_SLUG_EXIST);
                 }
             }
+        }else{
+            contents.setSlug(null);
         }
     }
 }

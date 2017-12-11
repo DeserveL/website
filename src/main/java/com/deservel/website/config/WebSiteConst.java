@@ -26,7 +26,6 @@ import java.util.Map;
  * @since 1.0.0
  */
 public interface WebSiteConst {
-    Map<String, String> OPTIONS = new HashMap<>();
 
     /**
      * 用户session key

@@ -1,33 +1,48 @@
-#include('./header.html',{active:'themes', title:'主题'})
-<div class="row">
-    <div class="col-sm-12">
-        <h4 class="page-title">主题管理</h4>
-    </div>
-    <div class="col-md-12">
-        #for(theme : themes)
-        <div class="col-md-3 text-center m-t-10">
-            <img class="attach-img bx-shadow" src="/templates/themes/${theme.name}/screenshot.png" width="200" height="200" title="${theme.name}"/>
-            <div class="clearfix m-t-10">
-                主题：<span>${theme.name}</span> #if(theme.name == current_theme) <mark>（当前主题）</mark> #end
-            </div>
-            <div class="clearfix m-t-10">
-                #if(theme.name == current_theme && theme.hasSetting)
-                <a class="btn btn-info" href="/admin/themes/setting"><span>主题设置</span></a>
-                #end
-                #if(theme.name != current_theme)
-                <button onclick="activeTheme('${theme.name}');" type="button" class="btn btn-danger btn-sm waves-effect waves-light m-t-5">
-                    <i class="fa fa-check-circle"></i> <span>启用该主题</span>
-                </button>
-                #end
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='主题',active='themes',has_sub=''">
+<header th:replace="admin/header::headerFragment(${title},${active},${has_sub})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">主题管理</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <th:block th:each="theme : ${themes}">
+                            <div class="col-md-3 text-center m-t-10">
+                                <img class="attach-img bx-shadow" th:src="'/templates/themes/'+${theme.name}+'/screenshot.png'" width="200" height="200" th:title="${theme.name}"/>
+                                <div class="clearfix m-t-10">
+                                    主题：<span th:text="${theme.name}"></span>
+                                    <th:block th:if="${theme.name == current_theme}">
+                                        <mark>（当前主题）</mark>
+                                    </th:block>
+                                </div>
+                                <div class="clearfix m-t-10">
+                                    <th:block th:if="${theme.name == current_theme and theme.hasSetting}">
+                                        <a class="btn btn-info" href="/admin/themes/setting"><span>主题设置</span></a>
+                                    </th:block>
+                                    <th:block th:if="${theme.name != current_theme}">
+                                        <button th:onclick="'activeTheme('+${theme.name}+');'" type="button" class="btn btn-danger btn-sm waves-effect waves-light m-t-5">
+                                            <i class="fa fa-check-circle"></i> <span>启用该主题</span>
+                                        </button>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                <div th:replace="admin/footer :: footer-content"></div>
             </div>
         </div>
-        #end
     </div>
 </div>
-
-#include('./footer.html')
+<div th:replace="admin/footer :: footer"></div>
 <script type="text/javascript">
-
+    /*<![CDATA[*/
     var tale = new $.tale();
 
     /**
@@ -52,7 +67,7 @@
             }
         });
     }
-
+    /*]]>*/
 </script>
 </body>
 </html>

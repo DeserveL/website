@@ -67,6 +67,15 @@ public class ThymeleafCommons {
     }
 
     /**
+     * 返回当前主题名称
+     *
+     * @return
+     */
+    public static String site_theme() {
+        return site_option("site_theme", "default");
+    }
+
+    /**
      * 网站配置项
      *
      * @param key
@@ -87,7 +96,7 @@ public class ThymeleafCommons {
         if (StringUtils.isBlank(key)) {
             return "";
         }
-        String str = WebSiteConst.OPTIONS.get(key);
+        String str = WebSiteTools.OPTIONS.get(key);
         if (StringUtils.isNotBlank(str)) {
             return str;
         } else {
@@ -111,8 +120,7 @@ public class ThymeleafCommons {
      * @return
      */
     public static String site_url(String sub) {
-        //TODO 网站全址
-        return sub;
+        return site_option("site_url") + sub;
     }
 
     /**
