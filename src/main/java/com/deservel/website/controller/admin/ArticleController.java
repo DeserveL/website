@@ -63,7 +63,7 @@ public class ArticleController extends AbstractBaseController{
     public String index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "limit", defaultValue = "15") Integer limit) {
         try {
-            PageInfo<Contents> contentsPaginator = contentService.getArticlesWithPage(page, limit);
+            PageInfo<Contents> contentsPaginator = contentService.getArticlesWithPage(Types.ARTICLE, null, page, limit);
             setRequestAttribute("articles", contentsPaginator);
             return "admin/article_list";
         } catch (Exception e) {

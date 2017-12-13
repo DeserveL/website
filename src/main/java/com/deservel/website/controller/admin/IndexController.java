@@ -16,11 +16,10 @@
 package com.deservel.website.controller.admin;
 
 import com.deservel.website.common.bean.RestResponse;
-import com.deservel.website.config.WebSiteConst;
 import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.controller.AbstractBaseController;
-import com.deservel.website.model.dto.LogActions;
 import com.deservel.website.model.dto.Statistics;
+import com.deservel.website.model.dto.Types;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Logs;
@@ -28,13 +27,10 @@ import com.deservel.website.model.po.Users;
 import com.deservel.website.service.LogService;
 import com.deservel.website.service.SiteService;
 import com.deservel.website.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -66,7 +62,7 @@ public class IndexController extends AbstractBaseController {
             //最新的5条评论
             List<Comments> comments = siteService.recentComments(5);
             //最新的5跳文章
-            List<Contents> contents = siteService.recentContents(5);
+            List<Contents> contents = siteService.recentContents(Types.RECENT_ARTICLE, 5);
             //获取后台统计数据
             Statistics statistics = siteService.getStatistics();
             // 取最新的20条日志

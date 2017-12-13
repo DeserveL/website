@@ -68,4 +68,17 @@ public interface HtmlUtils {
         value = value.replaceAll("script", "");
         return value;
     }
+
+    /**
+     * 提取html中的文字
+     *
+     * @param html
+     * @return
+     */
+    static String htmlToText(String html) {
+        if (StringUtils.isNotBlank(html)) {
+            return html.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+        }
+        return "";
+    }
 }

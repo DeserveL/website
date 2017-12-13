@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -74,15 +75,24 @@ public class ContentServiceImpl implements ContentService {
     /**
      * 获取文章列表
      *
+     *
+     * @param type
+     * @param status
      * @param page
      * @param limit
      * @return
      */
     @Override
-    public PageInfo<Contents> getArticlesWithPage(Integer page, Integer limit) {
+    public PageInfo<Contents> getArticlesWithPage(String type, String status, Integer page, Integer limit) {
         Condition condition = new Condition(Contents.class);
         condition.setOrderByClause("created desc");
-        condition.createCriteria().andEqualTo("type", Types.ARTICLE);
+        Example.Criteria criteria = condition.createCriteria();
+        if(StringUtils.isNotBlank(type)){
+            criteria.andEqualTo("type", type);
+        }
+        if(StringUtils.isNotBlank(status)){
+            criteria.andEqualTo("status", status);
+        }
         PageHelper.startPage(page, limit);
         List<Contents> contents = contentsMapper.selectByCondition(condition);
         return new PageInfo<>(contents);

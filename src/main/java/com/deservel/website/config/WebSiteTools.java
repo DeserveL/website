@@ -17,6 +17,7 @@ package com.deservel.website.config;
 
 import com.deservel.website.common.utils.AesUtils;
 import com.deservel.website.common.utils.CookieUtils;
+import com.deservel.website.common.utils.HtmlUtils;
 import com.deservel.website.model.po.Users;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -205,5 +206,40 @@ public class WebSiteTools {
         path = path.substring(0, lastIndex);
         File file = new File("");
         return file.getAbsolutePath() + "/";
+    }
+
+    /**
+     * 截取文章摘要
+     *
+     * @param value 文章内容
+     * @param len   要截取文字的个数
+     * @return
+     */
+    public static String intro(String value, int len) {
+        int pos = value.indexOf("<!--more-->");
+        if (pos != -1) {
+            String html = value.substring(0, pos);
+            return HtmlUtils.htmlToText(HtmlUtils.mdToHtml(html));
+        } else {
+            String text = HtmlUtils.htmlToText(HtmlUtils.mdToHtml(value));
+            if (text.length() > len) {
+                return text.substring(0, len);
+            }
+            return text;
+        }
+    }
+
+    /**
+     * 显示文章内容，转换markdown为html
+     *
+     * @param value
+     * @return
+     */
+    public static String article(String value) {
+        if (StringUtils.isNotBlank(value)) {
+            value = value.replace("<!--more-->", "\r\n");
+            return HtmlUtils.mdToHtml(value);
+        }
+        return "";
     }
 }

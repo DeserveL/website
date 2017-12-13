@@ -29,11 +29,11 @@ import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Metas;
 import com.deservel.website.service.SiteService;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,20 +74,34 @@ public class SiteServiceImpl implements SiteService {
     }
 
     /**
-     * 最新发表的文章
+     * 最新或者随机发表的文章
      *
+     *
+     * @param type
      * @param limit
      * @return
      */
     @Override
-    public List<Contents> recentContents(Integer limit) {
-        //创建日期倒叙
-        Condition condition = new Condition(Contents.class);
-        condition.setOrderByClause("created desc");
-        //分页
-        PageHelper.startPage(1, limit);
-        List<Contents> contents = contentsMapper.selectByCondition(condition);
-        return contents;
+    public List<Contents> recentContents(String type, Integer limit) {
+
+        // 最新文章
+        if (Types.RECENT_ARTICLE.equals(type)) {
+            //分页
+            PageHelper.startPage(1, limit);
+            //创建日期倒叙
+            Condition condition = new Condition(Contents.class);
+            condition.setOrderByClause("created desc");
+            condition.createCriteria().andEqualTo("status", Types.PUBLISH).andEqualTo("type", Types.ARTICLE);
+            List<Contents> contents = contentsMapper.selectByCondition(condition);
+            return contents;
+        }
+
+        // 随机文章
+        if (Types.RANDOM_ARTICLE.equals(type)) {
+            List<Contents> contents = contentsMapper.selectRandomArticle(type, Types.PUBLISH, limit);
+            return contents;
+        }
+        return new ArrayList<>();
     }
 
     /**

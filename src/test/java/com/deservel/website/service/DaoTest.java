@@ -16,9 +16,11 @@
 package com.deservel.website.service;
 
 import com.deservel.website.AbstractSpringBootTest;
+import com.deservel.website.dao.ContentsMapper;
 import com.deservel.website.dao.LogsMapper;
 import com.deservel.website.dao.MetasMapper;
 import com.deservel.website.model.dto.Types;
+import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Logs;
 import com.deservel.website.model.po.Metas;
 import org.junit.Test;
@@ -37,6 +39,8 @@ public class DaoTest extends AbstractSpringBootTest{
     LogsMapper logsMapper;
     @Autowired
     MetasMapper metasMapper;
+    @Autowired
+    ContentsMapper contentsMapper;
 
     @Test
     public void logs(){
@@ -47,5 +51,11 @@ public class DaoTest extends AbstractSpringBootTest{
     public void metas(){
         List<Metas> metas = metasMapper.selectByType(Types.CATEGORY);
         System.out.println(metas);
+    }
+
+    @Test
+    public void contents(){
+        List<Contents> contents = contentsMapper.selectRandomArticle(Types.ARTICLE, Types.PUBLISH, 10);
+        System.out.println(contents);
     }
 }

@@ -20,6 +20,7 @@ import com.deservel.website.model.po.Contents;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DeserveL
@@ -29,7 +30,9 @@ import java.util.List;
 @Data
 public class IndexDto {
 
-    public List<Contents> recentArticles;
+    private List<Contents> recentArticles;
 
-    public List<Comments> recentComments;
+    private List<Comments> recentComments;
+
+    private Map<String, String> options;
 }

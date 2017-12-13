@@ -28,11 +28,14 @@ public interface ContentService {
     /**
      * 获取文章列表
      *
+     *
+     * @param type
+     * @param status
      * @param page
      * @param limit
      * @return
      */
-    PageInfo<Contents> getArticlesWithPage(Integer page, Integer limit);
+    PageInfo<Contents> getArticlesWithPage(String type, String status, Integer page, Integer limit);
 
     /**
      * 获取页面列表

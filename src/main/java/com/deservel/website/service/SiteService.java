@@ -37,12 +37,14 @@ public interface SiteService {
     List<Comments> recentComments(Integer limit);
 
     /**
-     * 最新发表的文章
+     * 最新或者随机发表的文章
      *
+     *
+     * @param type
      * @param limit
      * @return
      */
-    List<Contents> recentContents(Integer limit);
+    List<Contents> recentContents(String type, Integer limit);
 
     /**
      * 获取后台统计数据
