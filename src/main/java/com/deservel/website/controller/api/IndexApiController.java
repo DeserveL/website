@@ -63,8 +63,11 @@ public class IndexApiController extends AbstractBaseController{
                               @RequestParam(value = "limit", defaultValue = "12") Integer limit){
         PageInfo<Contents> articlesWithPage = contentService.getArticlesWithPage(Types.ARTICLE, Types.PUBLISH, page, limit);
         List<Contents> contentlist = articlesWithPage.getList();
-        //把文章内容替换为文章摘要
-        contentlist.forEach(c -> c.setContent(WebSiteTools.intro(c.getContent(),75)));
+        //把文章内容替换为文章摘要,缩略图处理
+        contentlist.forEach(c -> {
+            c.setThumbImg(WebSiteTools.show_thumb(c));
+            c.setContent(WebSiteTools.intro(c.getContent(),75));
+        });
         return RestResponse.ok(articlesWithPage);
     }
 

@@ -25,6 +25,8 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author DeserveL
@@ -78,6 +80,31 @@ public interface HtmlUtils {
     static String htmlToText(String html) {
         if (StringUtils.isNotBlank(html)) {
             return html.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+        }
+        return "";
+    }
+
+    Pattern SRC_PATTERN = Pattern.compile("src\\s*=\\s*\'?\"?(.*?)(\'|\"|>|\\s+)");
+    /**
+     * 获取文章第一张图片
+     *
+     * @return
+     */
+    static String show_thumb(String content) {
+        content = mdToHtml(content);
+        if (content.contains("<img")) {
+            String  img       = "";
+            String  regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+            Pattern p_image   = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+            Matcher m_image   = p_image.matcher(content);
+            if (m_image.find()) {
+                img = img + "," + m_image.group();
+                // //匹配src
+                Matcher m = SRC_PATTERN.matcher(img);
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
         }
         return "";
     }

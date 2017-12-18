@@ -18,6 +18,7 @@ package com.deservel.website.config;
 import com.deservel.website.common.utils.AesUtils;
 import com.deservel.website.common.utils.CookieUtils;
 import com.deservel.website.common.utils.HtmlUtils;
+import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Users;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -227,6 +228,29 @@ public class WebSiteTools {
             }
             return text;
         }
+    }
+
+    /**
+     * 显示文章缩略图，顺序为：文章第一张图 -> 随机获取
+     *
+     * @return
+     */
+    public static String show_thumb(Contents contents) {
+        if (null == contents) {
+            return "";
+        }
+        if (StringUtils.isNotBlank(contents.getThumbImg())) {
+            return "http://localhost:8081" + contents.getThumbImg();
+        }
+        String content = article(contents.getContent());
+        String img = HtmlUtils.show_thumb(content);
+        if (StringUtils.isNotBlank(img)) {
+            return img;
+        }
+        int cid  = contents.getCid();
+        int size = cid % 20;
+        size = size == 0 ? 1 : size;
+        return "static/image/rand/" + size + ".jpg";
     }
 
     /**
