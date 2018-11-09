@@ -141,6 +141,36 @@ public class ContentServiceImpl implements ContentService {
     }
 
     /**
+     * 获取相邻的文章
+     *
+     * @param type    上一篇:prev | 下一篇:next
+     * @param created 当前文章创建时间
+     */
+    @Override
+    public Contents getNhContent(String type, Integer created) {
+        Condition condition = new Condition(Contents.class);
+        Example.Criteria criteria = condition.createCriteria();
+        //下一篇
+        if (Types.NEXT.equals(type)) {
+            criteria.andGreaterThan("created", created);
+            condition.setOrderByClause("created ASC");
+        }
+        //上一篇
+        if (Types.PREV.equals(type)) {
+            criteria.andLessThan("created", created);
+            condition.setOrderByClause("created DESC");
+        }
+        //前一篇
+        PageHelper.startPage(1, 1);
+        List<Contents> contents = contentsMapper.selectByCondition(condition);
+        if (contents != null && contents.size() > 0) {
+            return contents.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * 添加文章
      *
      * @param contents

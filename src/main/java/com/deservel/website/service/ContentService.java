@@ -55,6 +55,14 @@ public interface ContentService {
     Contents getContents(String cid);
 
     /**
+     * 获取相邻的文章
+     *
+     * @param type    上一篇:prev | 下一篇:next
+     * @param created 当前文章创建时间
+     */
+    Contents getNhContent(String type, Integer created);
+
+    /**
      * 添加文章
      *
      * @param contents
