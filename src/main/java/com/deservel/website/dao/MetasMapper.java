@@ -4,6 +4,7 @@ import com.deservel.website.common.mapper.MyMapper;
 import com.deservel.website.model.dto.MetaDto;
 import com.deservel.website.model.po.Metas;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @date 2017/11/30 14:34
  * @since 1.0.0
  */
+@Repository
 public interface MetasMapper extends MyMapper<Metas> {
 
     /**

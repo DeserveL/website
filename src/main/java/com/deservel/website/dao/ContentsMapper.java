@@ -4,8 +4,8 @@ import com.deservel.website.common.mapper.MyMapper;
 import com.deservel.website.model.po.Contents;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import java.util.List;
  * @date 2017/11/30 14:33
  * @since 1.0.0
  */
+@Repository
 public interface ContentsMapper extends MyMapper<Contents> {
 
     /**
@@ -38,4 +39,22 @@ public interface ContentsMapper extends MyMapper<Contents> {
     @Select("select * from contents where type = #{type} and status = #{status} order by rand() * cid limit #{limit}")
     @ResultMap("BaseResultMap")
     List<Contents> selectRandomArticle(@Param("type") String type, @Param("status") String status, @Param("limit") Integer limit);
+
+    /*     add times method     */
+
+    /**
+     * 增加一个阅读次数
+     *
+     * @param cid
+     * @return
+     */
+    int updateReadTimes(Integer cid);
+
+    /**
+     * 增加一个评论次数
+     *
+     * @param cid
+     * @return
+     */
+    int updateCommentTimes(Integer cid);
 }

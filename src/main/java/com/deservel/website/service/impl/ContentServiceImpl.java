@@ -123,10 +123,10 @@ public class ContentServiceImpl implements ContentService {
      */
     @Override
     public Contents getContents(String cid) {
+        Contents content = null;
         if (StringUtils.isNotBlank(cid)) {
             if (StringUtils.isNumeric(cid)) {
-                Contents contents = contentsMapper.selectByPrimaryKey(Integer.valueOf(cid));
-                return contents;
+                content = contentsMapper.selectByPrimaryKey(Integer.valueOf(cid));
             } else {
                 Condition condition = new Condition(Contents.class);
                 condition.createCriteria().andEqualTo("slug", cid);
@@ -134,10 +134,14 @@ public class ContentServiceImpl implements ContentService {
                 if (contents.size() != 1) {
                     throw new TipPageException(ExceptionType.ID_NOT_ONE);
                 }
-                return contents.get(0);
+                content = contents.get(0);
             }
         }
-        return null;
+        // 增加一个阅读次数
+        if (null != content) {
+            contentsMapper.updateReadTimes(content.getCid());
+        }
+        return content;
     }
 
     /**
