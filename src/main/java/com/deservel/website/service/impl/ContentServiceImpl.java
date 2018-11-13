@@ -99,6 +99,23 @@ public class ContentServiceImpl implements ContentService {
     }
 
     /**
+     * 获取文章列表
+     *
+     * @param mid
+     * @param status
+     * @param type
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public PageInfo<Contents> getArticlesWithPage(Integer mid, String status, String type, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        List<Contents> contents = contentsMapper.selectArticles(mid, status, type);
+        return new PageInfo<>(contents);
+    }
+
+    /**
      * 获取页面列表
      *
      * @param page

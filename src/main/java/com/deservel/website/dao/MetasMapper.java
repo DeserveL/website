@@ -25,6 +25,15 @@ public interface MetasMapper extends MyMapper<Metas> {
     List<Metas> selectByType(@Param("type") String type);
 
     /**
+     * 根据类别和名称获取
+     *
+     * @param type
+     * @param name
+     * @return
+     */
+    Metas selectByTypeAndName(@Param("type") String type, @Param("name") String name);
+
+    /**
      * 根据类型查询项目列表，带项目下面的文章数
      *
      * @param type

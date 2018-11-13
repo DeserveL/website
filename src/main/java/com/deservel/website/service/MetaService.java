@@ -36,6 +36,14 @@ public interface MetaService {
     List<Metas> getMetas(String type);
 
     /**
+     * 根据类型和名字查询项
+     *
+     * @param type 类型，tag or category
+     * @param name 类型名
+     */
+    Metas getMeta(String type, String name);
+
+    /**
      * 保存多个项目
      *
      * @param cid

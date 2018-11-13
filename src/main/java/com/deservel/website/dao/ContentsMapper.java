@@ -40,6 +40,19 @@ public interface ContentsMapper extends MyMapper<Contents> {
     @ResultMap("BaseResultMap")
     List<Contents> selectRandomArticle(@Param("type") String type, @Param("status") String status, @Param("limit") Integer limit);
 
+    /**
+     * 获取文章
+     *
+     * @param mid
+     * @param status
+     * @param type
+     * @return
+     */
+    @Select("select a.* from contents a left join relationships b on a.cid = b.cid " +
+            "where b.mid = #{mid} and a.status = #{status} and a.type = #{type} order by a.created desc")
+    @ResultMap("BaseResultMap")
+    List<Contents> selectArticles(@Param("mid") Integer mid, @Param("status") String status, @Param("type") String type);
+
     /*     add times method     */
 
     /**

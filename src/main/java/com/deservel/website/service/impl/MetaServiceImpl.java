@@ -58,8 +58,24 @@ public class MetaServiceImpl implements MetaService {
      */
     @Override
     public List<Metas> getMetas(String type) {
-        List<Metas> metaList = metasMapper.selectByType(type);
-        return metaList;
+        if (StringUtils.isNotBlank(type)) {
+            return metasMapper.selectByType(type);
+        }
+        return null;
+    }
+
+    /**
+     * 根据类型和名字查询项
+     *
+     * @param type 类型，tag or category
+     * @param name 类型名
+     */
+    @Override
+    public Metas getMeta(String type, String name) {
+        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
+            return metasMapper.selectByTypeAndName(type, name);
+        }
+        return null;
     }
 
     /**

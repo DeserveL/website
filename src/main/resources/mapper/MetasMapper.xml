@@ -22,6 +22,10 @@
       select * from metas where type = #{type} ORDER BY sort desc, mid desc;
   </select>
 
+  <select id="selectByTypeAndName" resultMap="BaseResultMap">
+    select * from metas where type = #{type} and name = #{name} limit 1;
+  </select>
+
   <select id="selectMetaWhitContentList" resultMap="MetaDto">
     select a.*, count(b.cid) as count from metas a left join relationships b on a.mid = b.mid where a.type = #{type} group by a.mid order by count desc, a.mid desc limit #{maxPosts}
   </select>

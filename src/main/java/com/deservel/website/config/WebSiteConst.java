@@ -103,6 +103,11 @@ public interface WebSiteConst {
     int MIN_SLUG_COUNT = 5;
 
     /**
+     * 最大页码
+     */
+    int MAX_PAGE = 100;
+
+    /**
      * 最大获取文章条数
      */
     int MAX_POSTS = 9999;
