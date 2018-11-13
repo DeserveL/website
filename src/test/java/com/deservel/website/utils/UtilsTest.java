@@ -16,8 +16,12 @@
 package com.deservel.website.utils;
 
 import com.deservel.website.common.utils.AesUtils;
+import com.deservel.website.common.utils.DateUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
+
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * @author DeserveL
@@ -35,6 +39,12 @@ public class UtilsTest {
     public void md5(){
         String s = DigestUtils.md5Hex("admin" + "admin");
         System.out.println(s);
+    }
+
+    @Test
+    public void toDate() throws ParseException {
+        Date yyyy年MM月dd = DateUtils.toDate("2017年02月" + "01", "yyyy年MM月dd");
+        System.out.println(yyyy年MM月dd);
     }
 }
 

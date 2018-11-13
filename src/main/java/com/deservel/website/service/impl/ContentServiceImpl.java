@@ -24,6 +24,7 @@ import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.dao.ContentsMapper;
 import com.deservel.website.dao.LogsMapper;
 import com.deservel.website.dao.RelationshipsMapper;
+import com.deservel.website.model.dto.ArchiveDto;
 import com.deservel.website.model.dto.LogActions;
 import com.deservel.website.model.dto.Types;
 import com.deservel.website.model.po.Contents;
@@ -41,7 +42,12 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author DeserveL
@@ -112,6 +118,28 @@ public class ContentServiceImpl implements ContentService {
     public PageInfo<Contents> getArticlesWithPage(Integer mid, String status, String type, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         List<Contents> contents = contentsMapper.selectArticles(mid, status, type);
+        return new PageInfo<>(contents);
+    }
+
+    /**
+     * 获取文章列表
+     *
+     *
+     * @param title 模糊搜索
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public PageInfo<Contents> getArticlesWithPage(String title, Integer page, Integer limit) {
+        Condition condition = new Condition(Contents.class);
+        condition.setOrderByClause("created desc");
+        Example.Criteria criteria = condition.createCriteria();
+        if(StringUtils.isNotBlank(title)){
+            criteria.andLike("title", "%" + title + "%");
+        }
+        PageHelper.startPage(page, limit);
+        List<Contents> contents = contentsMapper.selectByCondition(condition);
         return new PageInfo<>(contents);
     }
 
@@ -281,6 +309,56 @@ public class ContentServiceImpl implements ContentService {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取归档文章
+     *
+     * @return
+     */
+    @Override
+    public List<ArchiveDto> getArchives() {
+        List<ArchiveDto> archives =contentsMapper.getArchives();
+        if (null != archives) {
+            return archives.stream()
+                    .map(this::parseArchive)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 归档文章列表详情
+     *
+     * @param archive
+     * @return
+     */
+    private ArchiveDto parseArchive(ArchiveDto archive) {
+        String dateStr = archive.getDateStr();
+        try {
+            Date sd = DateUtils.toDate(dateStr + "01", "yyyy年MM月dd");
+            archive.setDate(sd);
+            int start = DateUtils.getUnixTimeByDate(sd);
+            Calendar calender = Calendar.getInstance();
+            calender.setTime(sd);
+            calender.add(Calendar.MONTH, 1);
+            Date endSd = calender.getTime();
+            int end = DateUtils.getUnixTimeByDate(endSd) - 1;
+
+            Condition condition = new Condition(Contents.class);
+            condition.setOrderByClause("created desc");
+            Example.Criteria criteria = condition.createCriteria();
+            criteria.andEqualTo("type", Types.ARTICLE)
+                    .andEqualTo("status", Types.PUBLISH)
+                    .andLessThan("created", end)
+                    .andGreaterThan("created", start);
+            List<Contents> contents = contentsMapper.selectByCondition(condition);
+
+            archive.setArticles(contents);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return archive;
     }
 
     /**

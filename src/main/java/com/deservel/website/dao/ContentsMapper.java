@@ -1,6 +1,7 @@
 package com.deservel.website.dao;
 
 import com.deservel.website.common.mapper.MyMapper;
+import com.deservel.website.model.dto.ArchiveDto;
 import com.deservel.website.model.po.Contents;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
@@ -70,4 +71,11 @@ public interface ContentsMapper extends MyMapper<Contents> {
      * @return
      */
     int updateCommentTimes(Integer cid);
+
+    /**
+     * 获取归档文章
+     *
+     * @return
+     */
+    List<ArchiveDto> getArchives();
 }

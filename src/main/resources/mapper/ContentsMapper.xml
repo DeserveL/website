@@ -23,6 +23,11 @@
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
     </resultMap>
 
+    <resultMap id="ArchiveDto" type="com.deservel.website.model.dto.ArchiveDto">
+        <id column="date_str" jdbcType="VARCHAR" property="dateStr"/>
+        <result column="count" jdbcType="VARCHAR" property="count"/>
+    </resultMap>
+
     <select id="countContentsByTypeAndStatus" resultType="java.lang.Long">
       select count(*) from contents where type=#{type} and status=#{status}
     </select>
@@ -42,4 +47,13 @@
         </set>
         where cid = #{cid,jdbcType=INTEGER}
     </update>
+
+    <select id="getArchives" resultMap="ArchiveDto">
+        select DATE_FORMAT(from_unixtime(created), '%Y年%m月') as date_str, count(*) as count
+        from contents
+        where type = 'post'
+          and status = 'publish'
+        group by date_str
+        order by date_str desc
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.deservel.website.common.utils;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -15,5 +16,9 @@ public interface DateUtils {
 
     static int getUnixTimeByDate(Date date) {
         return (int) (date.getTime() / 1000L);
+    }
+
+    static Date toDate(String str, String parsePatterns) throws ParseException {
+        return org.apache.commons.lang3.time.DateUtils.parseDate(str, parsePatterns);
     }
 }

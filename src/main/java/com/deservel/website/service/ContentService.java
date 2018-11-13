@@ -15,8 +15,11 @@
  */
 package com.deservel.website.service;
 
+import com.deservel.website.model.dto.ArchiveDto;
 import com.deservel.website.model.po.Contents;
 import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * @author DeserveL
@@ -48,6 +51,17 @@ public interface ContentService {
      * @return
      */
     PageInfo<Contents> getArticlesWithPage(Integer mid, String status, String type, Integer page, Integer limit);
+
+    /**
+     * 获取文章列表
+     *
+     *
+     * @param title 模糊搜索
+     * @param page
+     * @param limit
+     * @return
+     */
+    PageInfo<Contents> getArticlesWithPage(String title, Integer page, Integer limit);
 
     /**
      * 获取页面列表
@@ -100,4 +114,11 @@ public interface ContentService {
      * @return
      */
     boolean deleteByCid(Integer cid, Integer uid, String remoteIp, String type);
+
+    /**
+     * 获取归档文章
+     *
+     * @return
+     */
+    List<ArchiveDto> getArchives();
 }
