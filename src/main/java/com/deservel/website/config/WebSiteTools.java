@@ -55,6 +55,12 @@ public class WebSiteTools {
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
 
     /**
+     *图片路径 http://localhost:8081
+     * public static final String IMAGE_URL = "http://www.deservel.top";
+     */
+    public static final String IMAGE_URL = "http://www.deservel.top";
+
+    /**
      * 返回当前登录用户
      *
      * @return
@@ -240,7 +246,8 @@ public class WebSiteTools {
             return "";
         }
         if (StringUtils.isNotBlank(contents.getThumbImg())) {
-            return "http://localhost:8081" + contents.getThumbImg();
+            // 图片url地址，数据库取; IMAGE_URL
+            return ThymeleafCommons.site_url() + contents.getThumbImg();
         }
         String content = article(contents.getContent());
         String img = HtmlUtils.show_thumb(content);
