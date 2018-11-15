@@ -15,9 +15,6 @@
  */
 package com.deservel.website.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 网站配置表
  *
@@ -33,7 +30,7 @@ public interface WebSiteConst {
     String LOGIN_SESSION_KEY = "login_user";
 
     /**
-     *用户uid cookie key
+     * 用户uid cookie key
      */
     String USER_IN_COOKIE = "S_L_ID";
 
@@ -70,12 +67,12 @@ public interface WebSiteConst {
     /**
      * 密码错误时间（s）
      */
-    int PASSWORD_ERROR_TIME = 10*60;
+    int PASSWORD_ERROR_TIME = 10 * 60;
 
     /**
      * 后台统计数据缓存时间
      */
-    int STATISTICS_TIME = 10*60*60;
+    int STATISTICS_TIME = 10 * 60 * 60;
 
     /**
      * 文章标题最多可以输入的文字个数
@@ -116,4 +113,10 @@ public interface WebSiteConst {
      * 上传文件最大20M
      */
     Integer MAX_FILE_SIZE = 204800;
+    /**
+     * 控制評論是否自動提交
+     */
+    boolean OPTION_ALLOW_COMMENT_AUDIT=true;
+    String COMMENT_APPROVED = "approved";
+    String COMMENT_NO_AUDIT = "no_audit";
 }

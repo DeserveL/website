@@ -1,8 +1,12 @@
 package com.deservel.website.dao;
 
 import com.deservel.website.common.mapper.MyMapper;
+import com.deservel.website.model.dto.CommentDto;
 import com.deservel.website.model.po.Comments;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  *
@@ -13,4 +17,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CommentsMapper extends MyMapper<Comments> {
+    List<CommentDto> selectArticleCommentsById(@Param("uid")Integer uid);
 }

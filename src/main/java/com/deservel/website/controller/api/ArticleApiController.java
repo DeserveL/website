@@ -20,16 +20,22 @@ import com.deservel.website.config.WebSiteConst;
 import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.controller.AbstractBaseController;
 import com.deservel.website.model.dto.ArchiveDto;
+import com.deservel.website.model.dto.CommentDto;
 import com.deservel.website.model.dto.Types;
+import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Contents;
+import com.deservel.website.service.CommentService;
 import com.deservel.website.service.ContentService;
+import com.deservel.website.service.SiteService;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sun.security.validator.ValidatorException;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +47,15 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api")
+@Slf4j
 public class ArticleApiController extends AbstractBaseController {
 
     @Autowired
     ContentService contentService;
+    @Autowired
+    CommentService commentService;
+    @Autowired
+    SiteService siteService;
 
     /**
      * 文章数据
@@ -113,4 +124,55 @@ public class ArticleApiController extends AbstractBaseController {
         rs.put("articles", articles);
         return RestResponse.ok(rs);
     }
+
+    @GetMapping("/comments")
+    public RestResponse getCommentsByArticleId(@RequestParam(value = "cid") Integer cid,
+                                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                               @RequestParam(value = "limit", defaultValue = "12") Integer limit) {
+        page = page < 0 || page > WebSiteConst.MAX_PAGE ? 1 : page;
+        PageInfo<CommentDto> pageInfo = commentService.getArticleComments(cid, page, limit);
+        return RestResponse.ok(pageInfo);
+    }
+
+    /**
+     * 评论操作
+     */
+    @PostMapping("/saveComment")
+    public RestResponse<?> comment(@RequestBody Comments comments) {
+        HttpServletRequest request = getRequest();
+        String val = request.getRequestURL().toString() + ":" + comments.getCid();
+        Integer count = cache.hget(Types.COMMENTS_FREQUENCY, val);
+        if (null != count && count > 0) {
+            return RestResponse.fail("您发表评论太快了，请过会再试");
+        }
+        comments.setIp(getRemoteIp());
+        comments.setAgent(request.getHeader("User-Agent"));
+        if (!WebSiteConst.OPTION_ALLOW_COMMENT_AUDIT) {
+            comments.setStatus(WebSiteConst.COMMENT_NO_AUDIT);
+        } else {
+            comments.setStatus(WebSiteConst.COMMENT_APPROVED);
+        }
+        try {
+            commentService.saveComment(comments);
+            addCookie("tale_remember_author", URLEncoder.encode(comments.getAuthor(), "UTF-8"));
+            addCookie("tale_remember_mail", URLEncoder.encode(comments.getMail(), "UTF-8"));
+            if (StringUtils.isNotBlank(comments.getUrl())) {
+                addCookie("tale_remember_url", URLEncoder.encode(comments.getUrl(), "UTF-8"));
+            }
+            // 设置对每个文章30秒可以评论一次
+            cache.hset(Types.COMMENTS_FREQUENCY, val, 1, 60);
+            System.out.println((Integer) cache.hget(Types.COMMENTS_FREQUENCY, val));
+            siteService.cleanStatisticsCache();
+            return RestResponse.ok();
+        } catch (Exception e) {
+            String msg = "评论发布失败";
+            if (e instanceof ValidatorException) {
+                msg = e.getMessage();
+            } else {
+                log.error(msg, e);
+            }
+            return RestResponse.fail(msg);
+        }
+    }
+
 }

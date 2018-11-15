@@ -22,6 +22,7 @@ import com.deservel.website.common.utils.HtmlUtils;
 import com.deservel.website.config.WebSiteConst;
 import com.deservel.website.dao.CommentsMapper;
 import com.deservel.website.dao.ContentsMapper;
+import com.deservel.website.model.dto.CommentDto;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Contents;
 import com.deservel.website.model.po.Users;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +69,26 @@ public class CommentServiceImpl implements CommentService {
         PageHelper.startPage(page, limit);
         List<Comments> comments = commentsMapper.selectByCondition(condition);
         return new PageInfo<>(comments);
+    }
+
+    /**
+     * 获取文章评论列表
+     *
+     * @param uid
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public PageInfo<CommentDto> getArticleComments(Integer uid, int page, int limit) {
+        PageHelper.startPage(page, limit);
+        List<CommentDto> comments = commentsMapper.selectArticleCommentsById(uid);
+        PageInfo<CommentDto> pageInfo=new PageInfo<>(comments);
+        for (CommentDto comment:pageInfo.getList()){
+            //获取子评论
+            setChildrenComment(comment);
+        }
+        return pageInfo;
     }
 
     /**
@@ -195,5 +217,39 @@ public class CommentServiceImpl implements CommentService {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取该评论下的追加评论
+     *
+     * @param coid 评论Id
+     * @return
+     */
+    private void getChildren(List<Comments> list, Integer coid) {
+        Condition condition = new Condition(Comments.class);
+        condition.setOrderByClause("coid asc");
+        condition.createCriteria()
+                 .andEqualTo("parent",coid)
+                 .andEqualTo("status","approved");
+        List<Comments> cms =commentsMapper.selectByCondition(condition);
+        if (null != cms) {
+            list.addAll(cms);
+            cms.forEach(c -> getChildren(list, c.getCoid()));
+        }
+    }
+
+    /**
+     * 將評論以及子评论封装
+     *
+     * @param parent 一级评论
+     * @return
+     */
+    private void setChildrenComment(CommentDto parent) {
+        List<Comments> children = new ArrayList<>();
+        getChildren(children, parent.getCoid());
+        parent.setChildren(children);
+        if (children.size()>0) {
+            parent.setLevels(1);
+        }
     }
 }
