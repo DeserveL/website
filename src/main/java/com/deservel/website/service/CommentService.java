@@ -15,6 +15,7 @@
  */
 package com.deservel.website.service;
 
+import com.deservel.website.model.dto.CommentDto;
 import com.deservel.website.model.po.Comments;
 import com.deservel.website.model.po.Users;
 import com.github.pagehelper.PageInfo;
@@ -35,6 +36,16 @@ public interface CommentService {
      * @return
      */
     PageInfo<Comments> getCommentsWithPage(Integer uid, int page, int limit);
+
+    /**
+     * 获取文章评论列表
+     *
+     * @param uid
+     * @param page
+     * @param limit
+     * @return
+     */
+    PageInfo<CommentDto> getArticleComments(Integer uid, int page, int limit);
 
     /**
      * 删除评论

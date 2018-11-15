@@ -15,7 +15,7 @@
  */
 package com.deservel.website.controller;
 
-import com.deservel.website.common.exception.TipPageException;
+import com.deservel.website.common.cache.MapCache;
 import com.deservel.website.common.utils.IpUtils;
 import com.deservel.website.config.WebSiteTools;
 import com.deservel.website.model.po.Users;
@@ -25,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpSession;
  * @since 1.0.0
  */
 public abstract class AbstractBaseController {
+    protected MapCache cache = MapCache.single();
     /**
      * 日志对象
      */
@@ -196,10 +198,36 @@ public abstract class AbstractBaseController {
      * @param e
      * @return
      */
-    public String errorPage(Exception e){
-        logger.error("页面获取失败",e);
+    public String errorPage(Exception e) {
+        logger.error("页面获取失败", e);
         getRequest().setAttribute("code", 500);
         getRequest().setAttribute("message", e.getMessage());
         return "comm/error_500";
     }
+
+    /**
+     * 添加cookie
+     *
+     * @param key
+     * @param value
+     * @param maxAge
+     */
+    protected void addCookie(String key, String value, int maxAge) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
+        getResponse().addCookie(cookie);
+    }
+
+    /**
+     * 添加cookie
+     *
+     * @param key
+     * @param value
+     */
+    protected void addCookie(String key, String value) {
+        addCookie(key, value, 7 * 24 * 60 * 60);
+    }
+
+
 }
