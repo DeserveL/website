@@ -81,20 +81,13 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public PageInfo<CommentDto> getArticleComments(Integer uid, int page, int limit) {
-        Condition condition = new Condition(Comments.class);
-        condition.setOrderByClause("coid desc");
-        condition.createCriteria().andEqualTo("parent", 0)
-                .andEqualTo("cid",uid)
-                .andEqualTo("status","approved");
         PageHelper.startPage(page, limit);
-        List<Comments> comments = commentsMapper.selectByCondition(condition);
-        PageInfo pageInfo=new PageInfo<>(comments);
-        List<CommentDto> commentDtoList=new ArrayList<>();
-        for (Comments comment:comments){
-            CommentDto commentDto=getCommentDto(comment);
-            commentDtoList.add(commentDto);
+        List<CommentDto> comments = commentsMapper.selectArticleCommentsById(uid);
+        PageInfo<CommentDto> pageInfo=new PageInfo<>(comments);
+        for (CommentDto comment:pageInfo.getList()){
+            //获取子评论
+            setChildrenComment(comment);
         }
-        pageInfo.setList(commentDtoList);
         return pageInfo;
     }
 
@@ -251,14 +244,12 @@ public class CommentServiceImpl implements CommentService {
      * @param parent 一级评论
      * @return
      */
-    private CommentDto getCommentDto(Comments parent) {
-        CommentDto commentDto  = new CommentDto(parent);
+    private void setChildrenComment(CommentDto parent) {
         List<Comments> children = new ArrayList<>();
-        getChildren(children, commentDto.getCoid());
-        commentDto.setChildren(children);
-        if (children!=null &&children.size()>0) {
-            commentDto.setLevels(1);
+        getChildren(children, parent.getCoid());
+        parent.setChildren(children);
+        if (children.size()>0) {
+            parent.setLevels(1);
         }
-        return commentDto;
     }
 }

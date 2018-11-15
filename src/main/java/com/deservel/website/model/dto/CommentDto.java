@@ -1,9 +1,7 @@
 package com.deservel.website.model.dto;
 
 import com.deservel.website.model.po.Comments;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -19,20 +17,4 @@ import java.util.List;
 public class CommentDto extends Comments {
     private int levels;
     private List<Comments> children;
-
-    public CommentDto(Comments comments) {
-        setAuthor(comments.getAuthor());
-        setMail(comments.getMail());
-        setCoid(comments.getCoid());
-        setAuthorId(comments.getAuthorId());
-        setUrl(comments.getUrl());
-        setCreated(comments.getCreated());
-        setAgent(comments.getAgent());
-        setIp(comments.getIp());
-        setContent(comments.getContent());
-        setOwnerId(comments.getOwnerId());
-        setCid(comments.getCid());
-        setParent(comments.getParent());
-    }
-
 }
