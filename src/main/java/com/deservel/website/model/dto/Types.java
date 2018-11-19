@@ -8,6 +8,8 @@ package com.deservel.website.model.dto;
  * @since 1.0.0
  */
 public interface Types {
+    String HTML = "html";
+    String MARKDOWN = "markdown";
     String TAG = "tag";
     String CATEGORY = "category";
     String LINK = "link";

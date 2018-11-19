@@ -66,8 +66,11 @@ public class ArticleApiController extends AbstractBaseController {
     @GetMapping("article/{cid}")
     public RestResponse article(@PathVariable(value = "cid") String cid) {
         Contents contents = contentService.getContents(cid);
-        //文章内容处理
-        contents.setContent(WebSiteTools.article(contents.getContent()));
+
+        if(Types.MARKDOWN.equals(contents.getFmtType())){
+            //文章内容处理
+            contents.setContent(WebSiteTools.article(contents.getContent()));
+        }
         //下一篇
         Contents nextContent = contentService.getNhContent(Types.NEXT, contents.getCreated());
         //前一篇
